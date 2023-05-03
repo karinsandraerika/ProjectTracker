@@ -1,4 +1,9 @@
-﻿namespace ProjectTracker;
+﻿using System.Configuration;
+using Microsoft.EntityFrameworkCore;
+
+using ProjectTracker.Data;
+
+namespace ProjectTracker;
 
 public class Program
 {
@@ -8,6 +13,12 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddRazorPages();
+
+
+        builder.Services.AddDbContext<DatabaseContext>(options =>
+                options.UseMySQL(
+                    builder.Configuration.GetConnectionString("myConnectionString")
+                    ));
 
         var app = builder.Build();
 

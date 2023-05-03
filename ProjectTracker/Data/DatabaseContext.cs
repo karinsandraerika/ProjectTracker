@@ -6,7 +6,7 @@ namespace ProjectTracker.Data
 {
 	public class DatabaseContext : DbContext
 	{
-        public DatabaseContext(DbContextOptions options)
+        public DatabaseContext(DbContextOptions<DatabaseContext> options)
             : base(options)
         {
         }
