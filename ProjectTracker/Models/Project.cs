@@ -5,7 +5,7 @@ namespace ProjectTracker.Models
 {
 	public class Project
 	{
-        [Key]
+        [Key] // primary key
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
