@@ -13,14 +13,23 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddRazorPages();
-
+        builder.Services.AddControllers(); //For controllers, API
 
         builder.Services.AddDbContext<DatabaseContext>(options =>
                 options.UseMySQL(
                     builder.Configuration.GetConnectionString("myConnectionString")
                     ));
+        //Added Swagger for the API
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
