@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectTracker.Data;
 
@@ -10,29 +11,15 @@ using ProjectTracker.Data;
 namespace ProjectTracker.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230504075837_PersonProjectItems")]
+    partial class PersonProjectItems
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.16")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            modelBuilder.Entity("PersonProjectItem", b =>
-                {
-                    b.Property<int>("PersonListId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProjectItemsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PersonListId", "ProjectItemsId");
-
-                    b.HasIndex("ProjectItemsId");
-
-                    b.ToTable("PersonProjectItem");
-                });
 
             modelBuilder.Entity("ProjectTracker.Models.Person", b =>
                 {
@@ -55,9 +42,14 @@ namespace ProjectTracker.Migrations
                     b.Property<int?>("ProjectId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ProjectItemId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProjectId");
+
+                    b.HasIndex("ProjectItemId");
 
                     b.ToTable("Person");
                 });
@@ -122,26 +114,15 @@ namespace ProjectTracker.Migrations
                     b.ToTable("ProjectItem");
                 });
 
-            modelBuilder.Entity("PersonProjectItem", b =>
-                {
-                    b.HasOne("ProjectTracker.Models.Person", null)
-                        .WithMany()
-                        .HasForeignKey("PersonListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProjectTracker.Models.ProjectItem", null)
-                        .WithMany()
-                        .HasForeignKey("ProjectItemsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("ProjectTracker.Models.Person", b =>
                 {
                     b.HasOne("ProjectTracker.Models.Project", null)
                         .WithMany("Persons")
                         .HasForeignKey("ProjectId");
+
+                    b.HasOne("ProjectTracker.Models.ProjectItem", null)
+                        .WithMany("PersonList")
+                        .HasForeignKey("ProjectItemId");
                 });
 
             modelBuilder.Entity("ProjectTracker.Models.ProjectItem", b =>
@@ -156,6 +137,11 @@ namespace ProjectTracker.Migrations
                     b.Navigation("Persons");
 
                     b.Navigation("Tasks");
+                });
+
+            modelBuilder.Entity("ProjectTracker.Models.ProjectItem", b =>
+                {
+                    b.Navigation("PersonList");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,6 +12,7 @@ namespace ProjectTracker.Models
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
+        public List<ProjectItem> ProjectItems { get; set; }
     }
 }
 
