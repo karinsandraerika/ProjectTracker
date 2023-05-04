@@ -8,11 +8,11 @@ namespace ProjectTracker.Models
         [Key] // primary key
         public int Id { get; set; }
         [Required]
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public List<Person> PersonList { get; set; }
-        public string Importance { get; set; }
-        public string Completed { get; set; }
+        public string? Name { get; set; }
+        public string? Description { get; set; }
+        public List<Person>? PersonList { get; set; }
+        public string? Importance { get; set; }
+        public string? Completed { get; set; }
         [Display(Name = "Start Date")]
         public DateTime StartDate { get; set; }
         [Display(Name = "End Date")]

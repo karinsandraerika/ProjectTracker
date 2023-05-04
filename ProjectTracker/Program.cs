@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 
 using ProjectTracker.Data;
+using ProjectTracker.Interfaces;
+using ProjectTracker.Repository;
 
 namespace ProjectTracker;
 
@@ -19,6 +21,7 @@ public class Program
                 options.UseMySQL(
                     builder.Configuration.GetConnectionString("myConnectionString")
                     ));
+        builder.Services.AddScoped<IProjectItemRepository, ProjectItemRepository>();
         //Added Swagger for the API
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
@@ -47,6 +50,7 @@ public class Program
         app.UseAuthorization();
 
         app.MapRazorPages();
+        app.MapControllers();
 
         app.Run();
     }

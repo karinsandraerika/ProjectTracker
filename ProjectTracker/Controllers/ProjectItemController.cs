@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectTracker.Data;
+using ProjectTracker.Interfaces;
 using ProjectTracker.Models;
 
 namespace ProjectTracker.Controllers
@@ -10,19 +11,36 @@ namespace ProjectTracker.Controllers
     [ApiController]
     public class ProjectItemController : ControllerBase
 	{
-            DatabaseContext DatabaseContext;
+        private readonly IProjectItemRepository _projectItemRepository;
+        DatabaseContext DatabaseContext;
 
-            public ProjectItemController(DatabaseContext databaseContext)
+            public ProjectItemController(IProjectItemRepository projectItemRepository, DatabaseContext databaseContext)
             {
-                DatabaseContext = databaseContext;
+            _projectItemRepository = projectItemRepository;
+            DatabaseContext = databaseContext;
             }
 
+        [HttpGet]
+        [ProducesResponseType(200, Type =typeof(IEnumerable<ProjectItem>))]
+        public IActionResult GetProjectItems()
+        {
+            var projectItems = _projectItemRepository.GetProjectItems();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            return Ok(projectItems);
+        }
+
+        /*
         [HttpGet]
         public  List<ProjectItem> GetProjectItems()
         {
             return DatabaseContext.ProjectItem.ToList();
         }
 
+        
         [HttpGet("{id}")]
         public ActionResult<ProjectItem> GetProjectItem(int id)
         {
@@ -59,5 +77,6 @@ namespace ProjectTracker.Controllers
 
             return CreatedAtAction(nameof(GetProjectItem), new { id = item.Id }, item);
         }
+        */
     }
- }
+}
