@@ -7,27 +7,20 @@ using ProjectTracker.Models;
 
 namespace ProjectTracker.Pages;
 
-public class IndexModel : PageModel
+public class ProjectItemsModel : PageModel
 {
-    private readonly DatabaseContext _context;
- 
+    private readonly ProjectTracker.Data.DatabaseContext _context;
 
-    public IndexModel(DatabaseContext context)
+    public ProjectItemsModel(ProjectTracker.Data.DatabaseContext context)
     {
         _context = context;
-
     }
 
-    public List<Project> Projects { get; set; } = default!;
-    
+    public List<ProjectItem> ProjectItems { get; set; } = default!;
+
 
     public void OnGet()
     {
-        Projects = _context.Project.ToList();
+        ProjectItems = _context.ProjectItem.ToList();
     }
 }
-
-     
-          
-      
-
