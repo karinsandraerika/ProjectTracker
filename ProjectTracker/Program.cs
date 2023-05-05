@@ -16,6 +16,7 @@ public class Program
         // Add services to the container.
         builder.Services.AddRazorPages();
         builder.Services.AddControllers(); //For controllers, API
+        builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()); // For mapping models to DTOs
 
         builder.Services.AddDbContext<DatabaseContext>(options =>
                 options.UseMySQL(

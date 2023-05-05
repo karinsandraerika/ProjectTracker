@@ -1,9 +1,12 @@
 ﻿using System;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectTracker.Data;
+using ProjectTracker.Dto;
 using ProjectTracker.Interfaces;
 using ProjectTracker.Models;
+using ProjectTracker.Repository;
 
 namespace ProjectTracker.Controllers
 {
@@ -13,18 +16,21 @@ namespace ProjectTracker.Controllers
 	{
         private readonly IProjectItemRepository _projectItemRepository;
         DatabaseContext DatabaseContext;
+        private readonly IMapper _mapper;
 
-            public ProjectItemController(IProjectItemRepository projectItemRepository, DatabaseContext databaseContext)
-            {
+        public ProjectItemController(IProjectItemRepository projectItemRepository, DatabaseContext databaseContext,
+            IMapper mapper)
+        {
             _projectItemRepository = projectItemRepository;
             DatabaseContext = databaseContext;
-            }
+            _mapper = mapper;
+        }
 
         [HttpGet]
         [ProducesResponseType(200, Type =typeof(IEnumerable<ProjectItem>))]
         public IActionResult GetProjectItems()
         {
-            var projectItems = _projectItemRepository.GetProjectItems();
+            var projectItems = _mapper.Map<List<ProjectItemDto>>(_projectItemRepository.GetProjectItems());
             if (!ModelState.IsValid)
             {
                 return BadRequest();

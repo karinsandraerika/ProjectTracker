@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ProjectTracker.Data;
+using ProjectTracker.Dto;
 using ProjectTracker.Interfaces;
 using ProjectTracker.Models;
+using ProjectTracker.Repository;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,18 +20,21 @@ namespace ProjectTracker.Controllers
     {
         private readonly IProjectRepository _projectRepository;
         private readonly DatabaseContext _DatabaseContext;
+        private readonly IMapper _mapper;
 
-        public ProjectController(IProjectRepository projectRepository, DatabaseContext databaseContext)
+        public ProjectController(IProjectRepository projectRepository, DatabaseContext databaseContext,
+            IMapper mapper)
         {
             _projectRepository = projectRepository;
             _DatabaseContext = databaseContext;
+            _mapper = mapper;
         }
 
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Project>))]
         public IActionResult GetProjects()
         {
-            var projects = _projectRepository.GetProjects();
+            var projects = _mapper.Map<List<ProjectDto>>(_projectRepository.GetProjects());
             if (!ModelState.IsValid)
             {
                 return BadRequest();

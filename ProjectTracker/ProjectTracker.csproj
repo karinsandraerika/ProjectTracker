@@ -12,6 +12,10 @@
     <None Remove="Controllers\" />
     <None Remove="Interfaces\" />
     <None Remove="Repository\" />
+    <None Remove="Dto\" />
+    <None Remove="AutoMapper" />
+    <None Remove="AutoMapper.Extensions.Microsoft.DependencyInjection" />
+    <None Remove="Helper\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
@@ -19,6 +23,8 @@
     <Folder Include="Controllers\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Repository\" />
+    <Folder Include="Dto\" />
+    <Folder Include="Helper\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.16" />
@@ -29,5 +35,7 @@
     <PackageReference Include="MySql.EntityFrameworkCore" Version="6.0.13" />
     <PackageReference Include="MySql.Data" Version="8.0.33" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
   </ItemGroup>
 </Project>
