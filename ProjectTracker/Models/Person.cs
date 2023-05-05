@@ -13,6 +13,7 @@ namespace ProjectTracker.Models
         public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
         public List<ProjectItem>? ProjectItems { get; set; }
+        //public List<Project> ProjectList { get; set; }
     }
 }
 

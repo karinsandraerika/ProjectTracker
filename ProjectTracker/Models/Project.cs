@@ -10,7 +10,7 @@ namespace ProjectTracker.Models
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<ProjectItem> Tasks { get; set; }
+        public List<ProjectItem> Tasks { get; set; } //Rename
         public List<Person> Persons { get; set; }
     }
 }

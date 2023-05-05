@@ -19,14 +19,12 @@ namespace ProjectTracker.Controllers
     public class PersonController : ControllerBase
     {
         private readonly IPersonRepository _personRepository;
-        private readonly DatabaseContext _DatabaseContext;
+        //private readonly DatabaseContext _DatabaseContext;
         private readonly IMapper _mapper;
 
-        public PersonController(IPersonRepository personRepository, DatabaseContext databaseContext,
-            IMapper mapper)
+        public PersonController(IPersonRepository personRepository, IMapper mapper)
         {
             _personRepository = personRepository;
-            _DatabaseContext = databaseContext;
             _mapper = mapper;
         }
 
@@ -69,15 +67,6 @@ namespace ProjectTracker.Controllers
                 return BadRequest(ModelState);
             }
 
-            var person = _personRepository.GetPersons().Where(p => p.Name.Trim().ToUpper() == newPerson.Name.Trim().ToUpper())
-                .FirstOrDefault();
-
-            if (person != null)
-            {
-                ModelState.AddModelError("", "Person already exists");
-                return StatusCode(422, ModelState);
-            }
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -87,7 +76,7 @@ namespace ProjectTracker.Controllers
 
             if (!_personRepository.CreatePerson(personMap))
             {
-                ModelState.AddModelError("", "Something went worng hile saving");
+                ModelState.AddModelError("", "Something went wrong hile saving");
                 return StatusCode(500, ModelState);
             }
 

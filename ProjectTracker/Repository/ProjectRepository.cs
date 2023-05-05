@@ -28,6 +28,18 @@ namespace ProjectTracker.Repository
         {
             return _context.Project.Any(p => p.Id == id);
         }
+
+        public bool CreateProject(Project project)
+        {
+            _context.Add(project);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }
     }
 }
 

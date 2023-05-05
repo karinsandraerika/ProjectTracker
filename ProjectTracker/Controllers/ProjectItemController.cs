@@ -15,14 +15,14 @@ namespace ProjectTracker.Controllers
     public class ProjectItemController : ControllerBase
 	{
         private readonly IProjectItemRepository _projectItemRepository;
-        //DatabaseContext DatabaseContext; //Can this be removed. db in repository
+        private readonly IProjectRepository _projectRepository;
+            
         private readonly IMapper _mapper;
 
-        public ProjectItemController(IProjectItemRepository projectItemRepository,
-            IMapper mapper)
+        public ProjectItemController(IProjectItemRepository projectItemRepository, IProjectRepository projectRepository, IMapper mapper)
         {
             _projectItemRepository = projectItemRepository;
-            //DatabaseContext = databaseContext;
+            _projectRepository = projectRepository;
             _mapper = mapper;
         }
 
@@ -55,6 +55,32 @@ namespace ProjectTracker.Controllers
             }
 
             return Ok(projectItem);
+        }
+
+        [HttpPost]
+        public IActionResult PostProjectItem([FromBody] ProjectItemDto newProjectItem)
+        {
+            if (newProjectItem == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var projectItemMap = _mapper.Map<ProjectItem>(newProjectItem);
+            //What happens when there are no projects or the id is wrong?
+            //projectItemMap.Project = _projectRepository.GetProject();
+
+            if (!_projectItemRepository.CreateProjectItem(projectItemMap))
+            {
+                ModelState.AddModelError("", "Something went wrong hile saving");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Sucessfully added");
         }
 
         /*

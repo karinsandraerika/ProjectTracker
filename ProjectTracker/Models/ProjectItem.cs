@@ -18,6 +18,7 @@ namespace ProjectTracker.Models
         [Display(Name = "End Date")]
         public DateTime EndDate { get; set; }
         public int TimeToComplete { get; set; }
-	}
+        public Project Project { get; set; }
+    }
 }
 

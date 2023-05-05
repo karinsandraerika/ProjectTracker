@@ -10,7 +10,6 @@ using ProjectTracker.Interfaces;
 using ProjectTracker.Models;
 using ProjectTracker.Repository;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ProjectTracker.Controllers
 {
@@ -19,14 +18,11 @@ namespace ProjectTracker.Controllers
     public class ProjectController : ControllerBase
     {
         private readonly IProjectRepository _projectRepository;
-        private readonly DatabaseContext _DatabaseContext;
         private readonly IMapper _mapper;
 
-        public ProjectController(IProjectRepository projectRepository, DatabaseContext databaseContext,
-            IMapper mapper)
+        public ProjectController(IProjectRepository projectRepository, IMapper mapper)
         {
             _projectRepository = projectRepository;
-            _DatabaseContext = databaseContext;
             _mapper = mapper;
         }
 
@@ -59,6 +55,40 @@ namespace ProjectTracker.Controllers
             }
 
             return Ok(project);
+        }
+
+        [HttpPost]
+        public IActionResult PostProject([FromBody] ProjectDto newProject)
+        {
+            if (newProject == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            
+            var project = _projectRepository.GetProjects().Where(p => p.Name.Trim().ToUpper() == newProject.Name.Trim().ToUpper())
+                .FirstOrDefault();
+
+            if (project != null)
+            {
+                ModelState.AddModelError("", "Project already exists");
+                return StatusCode(422, ModelState);
+            }
+         
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var projectMap = _mapper.Map<Project>(newProject);
+       
+            if (!_projectRepository.CreateProject(projectMap))
+            {
+                ModelState.AddModelError("", "Something went wrong hile saving");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Sucessfully added");
         }
 
 

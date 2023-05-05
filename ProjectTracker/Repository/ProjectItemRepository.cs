@@ -28,6 +28,20 @@ namespace ProjectTracker.Repository
         {
             return _context.ProjectItem.Any(p => p.Id == id);
         }
+
+        public bool CreateProjectItem(ProjectItem projectItem)
+        {
+            //var ProjectItemPersonEntity = _context.Person.Where(p => p.Id == personId).FirstOrDefault();
+            //Add the relationship for project when we've added a many-to-many.s
+            _context.Add(projectItem);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }
     }
 }
 
