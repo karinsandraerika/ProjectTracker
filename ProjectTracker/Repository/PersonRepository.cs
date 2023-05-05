@@ -16,7 +16,7 @@ namespace ProjectTracker.Repository
 
         public ICollection<Person> GetPersons()
         {
-            throw new NotImplementedException();
+            return _context.Person.ToList();
         }
     }
 }
