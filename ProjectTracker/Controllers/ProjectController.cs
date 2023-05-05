@@ -43,6 +43,24 @@ namespace ProjectTracker.Controllers
             return Ok(projects);
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetProject(int id)
+        {
+            if (!_projectRepository.ProjectExists(id))
+            {
+                return NotFound();
+            }
+
+            var project = _projectRepository.GetProject(id);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok(project);
+        }
+
 
         /*
         // GET: api/values

@@ -12,7 +12,11 @@ namespace PokemonReviewApp.Helper
             CreateMap<Person, PersonDto>();
             CreateMap<Project, ProjectDto>();
             CreateMap<ProjectItem, ProjectItemDto>();
-            
+
+            CreateMap<PersonDto, Person>();
+            CreateMap<ProjectDto, Project>();
+            CreateMap<ProjectItemDto, ProjectItem>();
+
         }
     }
 }

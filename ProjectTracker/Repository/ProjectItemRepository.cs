@@ -14,73 +14,20 @@ namespace ProjectTracker.Repository
             _context = context;
 		}
 
+        public ProjectItem GetProjectItem(int id)
+        {
+            return _context.ProjectItem.Where(pi => pi.Id == id).FirstOrDefault();
+        }
+
         public ICollection<ProjectItem> GetProjectItems()
         {
             return _context.ProjectItem.ToList();
         }
 
-        /*
-        public bool CreateProjectItem(int ProjectId, int PersonId, ProjectItem item)
+        public bool ProjectItemExists(int id)
         {
-            var projectItemProject = _context.Project.Where(a => a.Id == ProjectId).FirstOrDefault();
-            var projectItemPerson = _context.Person.Where(a => a.Id == PersonId).FirstOrDefault();
-
-            var pokemonOwner = new PokemonOwner()
-            {
-                Owner = pokemonOwnerEntity,
-                Pokemon = pokemon,
-            };
-
-            _context.Add(pokemonOwner);
-
-            var pokemonCategory = new PokemonCategory()
-            {
-                Category = category,
-                Pokemon = pokemon,
-            };
-
-            _context.Add(pokemonCategory);
-
-            _context.Add(pokemon);
-
-            return Save();
+            return _context.ProjectItem.Any(p => p.Id == id);
         }
-
-        public bool DeleteProjectItem(ProjectItem item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ProjectItem GetProjectItem(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ProjectItem GetProjectItem(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ICollection<ProjectItem> GetProjectItems()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool ProjectItemExists(int itemId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Save()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool UpdateProjectItem(int ProjectId, int PersonId, ProjectItem item)
-        {
-            throw new NotImplementedException();
-        }
-        */
     }
 }
 

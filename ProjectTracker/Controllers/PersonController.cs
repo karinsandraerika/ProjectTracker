@@ -43,6 +43,57 @@ namespace ProjectTracker.Controllers
             return Ok(persons);
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetPerson(int id)
+        {
+            if (!_personRepository.PersonExists(id))
+            {
+                return NotFound();
+            }
+
+            var person = _personRepository.GetPerson(id);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok(person);
+        }
+
+        [HttpPost]
+        public IActionResult PostPerson([FromBody] PersonDto newPerson)
+        {
+            if (newPerson == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var person = _personRepository.GetPersons().Where(p => p.Name.Trim().ToUpper() == newPerson.Name.Trim().ToUpper())
+                .FirstOrDefault();
+
+            if (person != null)
+            {
+                ModelState.AddModelError("", "Person already exists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var personMap = _mapper.Map<Person>(newPerson);
+
+            if (!_personRepository.CreatePerson(personMap))
+            {
+                ModelState.AddModelError("", "Something went worng hile saving");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Sucessfully added");
+        }
+
 
         /*
         // GET: api/values

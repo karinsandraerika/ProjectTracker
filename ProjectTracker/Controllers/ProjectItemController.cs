@@ -15,14 +15,14 @@ namespace ProjectTracker.Controllers
     public class ProjectItemController : ControllerBase
 	{
         private readonly IProjectItemRepository _projectItemRepository;
-        DatabaseContext DatabaseContext;
+        //DatabaseContext DatabaseContext; //Can this be removed. db in repository
         private readonly IMapper _mapper;
 
-        public ProjectItemController(IProjectItemRepository projectItemRepository, DatabaseContext databaseContext,
+        public ProjectItemController(IProjectItemRepository projectItemRepository,
             IMapper mapper)
         {
             _projectItemRepository = projectItemRepository;
-            DatabaseContext = databaseContext;
+            //DatabaseContext = databaseContext;
             _mapper = mapper;
         }
 
@@ -37,6 +37,24 @@ namespace ProjectTracker.Controllers
             }
 
             return Ok(projectItems);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetProjectItem(int id)
+        {
+            if (!_projectItemRepository.ProjectItemExists(id))
+            {
+                return NotFound();
+            }
+
+            var projectItem = _projectItemRepository.GetProjectItem(id);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok(projectItem);
         }
 
         /*
