@@ -22,6 +22,8 @@ public class Program
                     builder.Configuration.GetConnectionString("myConnectionString")
                     ));
         builder.Services.AddScoped<IProjectItemRepository, ProjectItemRepository>();
+        builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+        builder.Services.AddScoped<IPersonRepository, PersonRepository>();
         //Added Swagger for the API
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
