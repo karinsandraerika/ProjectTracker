@@ -44,10 +44,22 @@
                 <td>
                     <a asp-page="./Index" asp-route-id="@item.Id">Projects</a> |
                     <a asp-page="./ProjectItems" asp-route-id="@item.Id">Project Items</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                    <form method="post">
+                        <button asp-page-handler="Delete" asp-route-id="@item.Id" type="submit">Delete</button>
+                    </form>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<form method="post">
+    <input asp-for="@Model.person.Name" />
+    <p><span asp-validation-for="@Model.person.Name"></span></p>
+    <input asp-for="@Model.person.Email" />
+    <p><span asp-validation-for="@Model.person.Email"></span></p>
+    <input asp-for="@Model.person.PhoneNumber" />
+    <p><span asp-validation-for="@Model.person.PhoneNumber"></span></p>
+    <button type="submit">Create</button>
+</form>
 

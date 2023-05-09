@@ -17,10 +17,31 @@ namespace ProjectTracker.Pages;
         }
 
         public List<Person> Persons { get; set; } = default!;
-
+        [BindProperty]
+        public Person person { get; set; }
 
         public void OnGet()
         {
-            Persons = _context.Person.ToList();
+            Persons = _context.Person.Include(items => items.ProjectItems).ToList();
+        }
+
+        
+        public ActionResult OnPost() 
+        {
+            if (ModelState.IsValid) 
+            {
+                _context.Person.Add(person); 
+                _context.SaveChanges();
+                return RedirectToPage("./Persons");
+            }
+            return Page();
+        }
+
+        public ActionResult OnPostDelete(int id)
+        {
+            Person personToDelete = _context.Person.SingleOrDefault(p => p.Id == id);
+            _context.Person.Remove(personToDelete);  
+            _context.SaveChanges();
+            return RedirectToPage("/Persons");
         }
     }

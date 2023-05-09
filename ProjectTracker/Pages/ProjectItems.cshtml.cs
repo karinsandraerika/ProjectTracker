@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,10 +18,47 @@ public class ProjectItemsModel : PageModel
     }
 
     public List<ProjectItem> ProjectItems { get; set; } = default!;
+    public List<SelectListItem> PersonListItems { get; set; }
+
+    [BindProperty]
+    public ProjectItem projectItem { get; set; }
 
 
     public void OnGet()
     {
-        ProjectItems = _context.ProjectItem.ToList();
+        ProjectItems = _context.ProjectItem.Include(projectId => projectId.Project).
+            Include(person => person.PersonList).ToList();
+        var persons = _context.Person.ToList();
+        PersonListItems = persons.Select(p => new SelectListItem
+        {
+            Value = p.Id.ToString(),
+            Text = p.Name
+        }).ToList();
+        
     }
+
+    public ActionResult OnPost()
+    {
+        string[] selectedPersonIds = Request.Form["selectedPersons"];
+
+        projectItem.PersonList = new List<Person>();
+        foreach (string personId in selectedPersonIds)
+        {
+            var person = _context.Person.Find(int.Parse(personId));
+            if (person != null)
+            {
+                projectItem.PersonList.Add(person);
+            }
+        }
+
+        if (ModelState.IsValid)
+        {
+            _context.ProjectItem.Add(projectItem);
+            _context.SaveChanges();
+        }
+        return RedirectToPage("./ProjectItems");
+    }
+
+    
+
 }

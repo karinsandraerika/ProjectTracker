@@ -34,6 +34,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.ProjectItems[0].TimeToComplete)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProjectItems[0].Project)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProjectItems[0].PersonList)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -66,6 +72,12 @@
                     @Html.DisplayFor(modelItem => item.TimeToComplete)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.Project)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PersonList)
+                </td>
+                <td>
                     <a asp-page="./Index" asp-route-id="@item.Id">Project</a> |
                     <a asp-page="./Persons" asp-route-id="@item.Id">Persons</a> |
                     <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
@@ -75,3 +87,13 @@
     </tbody>
 </table>
 
+<form method="post">
+    <input asp-for="@Model.projectItem.Name" />
+    <p><span asp-validation-for="@Model.projectItem.Name"></span></p>
+    <input asp-for="@Model.projectItem.Description" />
+    <p><span asp-validation-for="@Model.projectItem.Description"></span></p>
+    <input asp-for="@Model.projectItem.Importance" />
+    <p><span asp-validation-for="@Model.projectItem.Importance"></span></p>
+    <select asp-for="@Model.projectItem.PersonList" asp-items="@Model.PersonListItems" multiple></select>
+    <button type="submit">Create</button>
+</form>
