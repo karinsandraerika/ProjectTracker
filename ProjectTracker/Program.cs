@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 using ProjectTracker.Data;
 using ProjectTracker.Interfaces;
@@ -15,7 +16,7 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddRazorPages();
-        builder.Services.AddControllers(); //For controllers, API
+        builder.Services.AddControllers().AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); }); ; //For controllers, API
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()); // For mapping models to DTOs
 
         builder.Services.AddDbContext<DatabaseContext>(options =>
