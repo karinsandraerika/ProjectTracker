@@ -27,7 +27,7 @@ public class ProjectItemsModel : PageModel
     public void OnGet()
     {
         ProjectItems = _context.ProjectItem.Include(projectId => projectId.Project).
-            Include(person => person.PersonList).ToList();
+            Include(person => person.Persons).ToList();
         var persons = _context.Person.ToList();
         PersonListItems = persons.Select(p => new SelectListItem
         {
@@ -41,13 +41,13 @@ public class ProjectItemsModel : PageModel
     {
         string[] selectedPersonIds = Request.Form["selectedPersons"];
 
-        projectItem.PersonList = new List<Person>();
+        projectItem.Persons = new List<Person>();
         foreach (string personId in selectedPersonIds)
         {
             var person = _context.Person.Find(int.Parse(personId));
             if (person != null)
             {
-                projectItem.PersonList.Add(person);
+                projectItem.Persons.Add(person);
             }
         }
 
@@ -58,7 +58,4 @@ public class ProjectItemsModel : PageModel
         }
         return RedirectToPage("./ProjectItems");
     }
-
-    
-
 }
