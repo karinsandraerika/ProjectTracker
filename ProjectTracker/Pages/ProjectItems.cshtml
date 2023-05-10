@@ -38,7 +38,7 @@
                 @Html.DisplayNameFor(model => model.ProjectItems[0].Project)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProjectItems[0].PersonList)
+                @Html.DisplayNameFor(model => model.ProjectItems[0].Persons)
             </th>
             <th></th>
         </tr>
@@ -75,7 +75,7 @@
                     @Html.DisplayFor(modelItem => item.Project)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.PersonList)
+                    @Html.DisplayFor(modelItem => item.Persons)
                 </td>
                 <td>
                     <a asp-page="./Index" asp-route-id="@item.Id">Project</a> |
@@ -94,6 +94,6 @@
     <p><span asp-validation-for="@Model.projectItem.Description"></span></p>
     <input asp-for="@Model.projectItem.Importance" />
     <p><span asp-validation-for="@Model.projectItem.Importance"></span></p>
-    <select asp-for="@Model.projectItem.PersonList" asp-items="@Model.PersonListItems" multiple></select>
+    <select asp-for="@Model.projectItem.Persons" asp-items="@Model.PersonListItems" multiple></select>
     <button type="submit">Create</button>
 </form>

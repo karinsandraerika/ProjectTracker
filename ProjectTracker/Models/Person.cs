@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ProjectTracker.Models
 {
+
 	public class Person
 	{
         [Key] // primary key
