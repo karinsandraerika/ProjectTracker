@@ -10,15 +10,18 @@ namespace ProjectTracker.Models
         [Required]
         public string? Name { get; set; }
         public string? Description { get; set; }
-        public List<Person>? PersonList { get; set; }
+        public List<Person>? Persons { get; set; }
         public string? Importance { get; set; }
         public string? Completed { get; set; }
+        [DataType(DataType.Date)]
         [Display(Name = "Start Date")]
         public DateTime StartDate { get; set; }
+        [DataType(DataType.Date)]
         [Display(Name = "End Date")]
         public DateTime EndDate { get; set; }
-        public int TimeToComplete { get; set; }
-        public Project Project { get; set; }
+        [Display(Name = "Time to complete")]
+        public TimeSpan TimeToComplete { get; set; }
+        public Project? Project { get; set; }
     }
 }
 
