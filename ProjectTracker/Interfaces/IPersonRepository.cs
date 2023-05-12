@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Metrics;
 using ProjectTracker.Models;
 
 namespace ProjectTracker.Interfaces
@@ -9,6 +10,7 @@ namespace ProjectTracker.Interfaces
         Person GetPerson(int id);
         bool PersonExists(int id);
         bool CreatePerson(Person person);
+        bool UpdatePerson(Person person);
         bool Save();
     }
 }

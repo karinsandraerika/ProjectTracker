@@ -9,6 +9,7 @@ namespace ProjectTracker.Interfaces
         Project GetProject(int id);
         bool ProjectExists(int id);
         bool CreateProject(Project project);
+        bool UpdateProject(Project project);
         bool Save();
     }
 }

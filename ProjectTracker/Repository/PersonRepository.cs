@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore;
 using ProjectTracker.Data;
 using ProjectTracker.Interfaces;
 using ProjectTracker.Models;
@@ -21,8 +22,18 @@ namespace ProjectTracker.Repository
 
         public ICollection<Person> GetPersons()
         {
+            // Include the list of projectitems (which will also include the list of persons inside projectitems).
+            //return _context.Person.Include(pe => pe.ProjectItems).ToList();
             return _context.Person.ToList();
         }
+
+        /*
+        public Person GetPerson(string username)
+        {
+            return _context.Person.Where(pe => pe.Username == username).FirstOrDefault();
+
+        }
+        */
 
         public bool PersonExists(int id)
         {
@@ -35,10 +46,15 @@ namespace ProjectTracker.Repository
             return Save();
         }
 
+        public bool UpdatePerson(Person person)
+        {
+            _context.Update(person);
+            return Save();
+        }
+
         public bool Save()
         {
-            var saved = _context.SaveChanges();
-            return saved > 0 ? true : false;
+            return _context.SaveChanges() > 0;
         }
     }
 }
