@@ -41,6 +41,12 @@ namespace ProjectTracker.Repository
             return Save();
         }
 
+        public bool DeleteProject(Project project)
+        {
+            _context.Remove(project);
+            return Save();
+        }
+
         public bool Save()
         {
             return _context.SaveChanges() > 0;

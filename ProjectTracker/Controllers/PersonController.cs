@@ -125,28 +125,30 @@ namespace ProjectTracker.Controllers
             return Ok("Succesfully updated");
         }
 
-
-        /*
-        /
-
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult DeletePerson(int id)
         {
+            if (!_personRepository.PersonExists(id))
+            {
+                return NotFound();
+            }
+
+            var personDelete = _personRepository.GetPerson(id);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_personRepository.DeletePerson(personDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong while deleting");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Succesfully deleted");
         }
-        */
+
     }
 }
 

@@ -116,51 +116,29 @@ namespace ProjectTracker.Controllers
             return Ok("Succesfully updated");
         }
 
-
-        /*
-        [HttpGet]
-        public  List<ProjectItem> GetProjectItems()
+        [HttpDelete("{id}")]
+        public IActionResult DeleteProjectItem(int id)
         {
-            return DatabaseContext.ProjectItem.ToList();
-        }
-
-        
-        [HttpGet("{id}")]
-        public ActionResult<ProjectItem> GetProjectItem(int id)
-        {
-            ProjectItem item = DatabaseContext.ProjectItem.Find(id);
-            if (item == null)
+            if (!_projectItemRepository.ProjectItemExists(id))
             {
                 return NotFound();
             }
-            return item; ;
-        }
 
-        [HttpPut("{id}")]
-        public IActionResult PutProjectItem(int id, ProjectItem item)
-        {
-            if (id != item.Id)
+            var projectItemDelete = _projectItemRepository.GetProjectItem(id);
+
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
-            DatabaseContext.Entry(item).State = EntityState.Modified;
+            if (!_projectItemRepository.DeleteProjectItem(projectItemDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong while deleting");
+                return StatusCode(500, ModelState);
+            }
 
-      
-            DatabaseContext.SaveChanges();
-
-            return NoContent();
+            return Ok("Succesfully deleted");
         }
 
-        [HttpPost]
-        public ActionResult<ProjectItem> PostProjectItem(ProjectItem item)
-        {
-            
-            DatabaseContext.ProjectItem.Add(item);
-            DatabaseContext.SaveChanges();
-
-            return CreatedAtAction(nameof(GetProjectItem), new { id = item.Id }, item);
-        }
-        */
     }
 }
