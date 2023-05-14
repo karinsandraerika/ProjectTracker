@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 using ProjectTracker.Data;
 using ProjectTracker.Interfaces;
@@ -15,7 +16,14 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddRazorPages();
-        builder.Services.AddControllers(); //For controllers, API
+        //Added Newtonsoftjson to handle infinite reference loop, and changed the enum converter to be able to chain them.
+        builder.Services.AddControllers()
+        .AddNewtonsoftJson(options =>
+        {
+            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+        }); 
+
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()); // For mapping models to DTOs
 
         builder.Services.AddDbContext<DatabaseContext>(options =>

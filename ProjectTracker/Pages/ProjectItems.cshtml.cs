@@ -58,7 +58,4 @@ public class ProjectItemsModel : PageModel
         }
         return RedirectToPage("./ProjectItems");
     }
-
-    
-
 }

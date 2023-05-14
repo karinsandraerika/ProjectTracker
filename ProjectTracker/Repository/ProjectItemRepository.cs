@@ -37,10 +37,21 @@ namespace ProjectTracker.Repository
             return Save();
         }
 
+        public bool UpdateProjectItem(ProjectItem projectItem)
+        {
+            _context.Update(projectItem);
+            return Save();
+        }
+
+        public bool DeleteProjectItem(ProjectItem projectItem)
+        {
+            _context.Remove(projectItem);
+            return Save();
+        }
+
         public bool Save()
         {
-            var saved = _context.SaveChanges();
-            return saved > 0 ? true : false;
+            return _context.SaveChanges() > 0;
         }
     }
 }

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using ProjectTracker.Enums;
 
 namespace ProjectTracker.Models
 {
-	public class ProjectItem
+    public class ProjectItem
 	{
         [Key] // primary key
         public int Id { get; set; }
@@ -11,8 +12,8 @@ namespace ProjectTracker.Models
         public string? Name { get; set; }
         public string? Description { get; set; }
         public List<Person>? Persons { get; set; }
-        public string? Importance { get; set; }
-        public string? Completed { get; set; }
+        public Importance? Importance { get; set; }
+        public CompletionStatus? Completed { get; set; }
         [DataType(DataType.Date)]
         [Display(Name = "Start Date")]
         public DateTime StartDate { get; set; }
