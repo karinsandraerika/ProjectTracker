@@ -1,28 +1,23 @@
 ﻿using System;
+using ProjectTracker.Models;
 using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 using ProjectTracker.Enums;
 
-namespace ProjectTracker.Models
+namespace ProjectTracker.Dto
 {
-    public class ProjectItem
+	public class ProjectItemDto
 	{
-        [Key] // primary key
         public int Id { get; set; }
-        [Required]
         public string? Name { get; set; }
         public string? Description { get; set; }
-        public List<Person>? Persons { get; set; }
-        public Importance? Importance { get; set; }
+        public Importance? Importance { get; set; } = null;
         public CompletionStatus? Completed { get; set; }
-        [DataType(DataType.Date)]
         [Display(Name = "Start Date")]
         public DateTime StartDate { get; set; }
-        [DataType(DataType.Date)]
         [Display(Name = "End Date")]
         public DateTime EndDate { get; set; }
-        [Display(Name = "Time to complete")]
-        public TimeSpan TimeToComplete { get; set; }
-        public Project? Project { get; set; }
+        //public TimeSpan TimeToComplete { get; set; }
     }
 }
 

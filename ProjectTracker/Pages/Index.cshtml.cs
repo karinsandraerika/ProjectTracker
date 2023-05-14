@@ -1,20 +1,35 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using ProjectTracker.Data;
+using ProjectTracker.Models;
 
 namespace ProjectTracker.Pages;
 
 public class IndexModel : PageModel
 {
-    private readonly ILogger<IndexModel> _logger;
+    private readonly DatabaseContext _context;
+ 
 
-    public IndexModel(ILogger<IndexModel> logger)
+    public IndexModel(DatabaseContext context)
     {
-        _logger = logger;
+        _context = context;
+
     }
+
+    public List<Project> Projects { get; set; } = default!;
+
 
     public void OnGet()
     {
-
+        Projects = _context.Project.ToList();
     }
+
 }
+
+     
+          
+      
 

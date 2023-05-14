@@ -8,10 +8,10 @@ namespace ProjectTracker.Models
         [Key] // primary key
         public int Id { get; set; }
         [Required]
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public List<ProjectItem> Tasks { get; set; }
-        public List<Person> Persons { get; set; }
+        public string? Name { get; set; }
+        public string? Description { get; set; }
+        public List<ProjectItem>? ProjectItems { get; set; }
+        public List<Person>? Persons { get; set; }
     }
 }
 

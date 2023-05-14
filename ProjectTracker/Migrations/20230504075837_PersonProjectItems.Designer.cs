@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectTracker.Data;
 
@@ -10,44 +11,15 @@ using ProjectTracker.Data;
 namespace ProjectTracker.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230504075837_PersonProjectItems")]
+    partial class PersonProjectItems
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.16")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            modelBuilder.Entity("PersonProject", b =>
-                {
-                    b.Property<int>("PersonsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProjectsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PersonsId", "ProjectsId");
-
-                    b.HasIndex("ProjectsId");
-
-                    b.ToTable("PersonProject");
-                });
-
-            modelBuilder.Entity("PersonProjectItem", b =>
-                {
-                    b.Property<int>("PersonsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProjectItemsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PersonsId", "ProjectItemsId");
-
-                    b.HasIndex("ProjectItemsId");
-
-                    b.ToTable("PersonProjectItem");
-                });
 
             modelBuilder.Entity("ProjectTracker.Models.Person", b =>
                 {
@@ -56,6 +28,7 @@ namespace ProjectTracker.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Name")
@@ -63,13 +36,20 @@ namespace ProjectTracker.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProjectItemId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("ProjectItemId");
 
                     b.ToTable("Person");
                 });
@@ -81,6 +61,7 @@ namespace ProjectTracker.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Name")
@@ -99,15 +80,18 @@ namespace ProjectTracker.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Completed")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Importance")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Name")
@@ -120,8 +104,8 @@ namespace ProjectTracker.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<TimeSpan>("TimeToComplete")
-                        .HasColumnType("time(6)");
+                    b.Property<int>("TimeToComplete")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -130,48 +114,34 @@ namespace ProjectTracker.Migrations
                     b.ToTable("ProjectItem");
                 });
 
-            modelBuilder.Entity("PersonProject", b =>
+            modelBuilder.Entity("ProjectTracker.Models.Person", b =>
                 {
-                    b.HasOne("ProjectTracker.Models.Person", null)
-                        .WithMany()
-                        .HasForeignKey("PersonsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ProjectTracker.Models.Project", null)
-                        .WithMany()
-                        .HasForeignKey("ProjectsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("PersonProjectItem", b =>
-                {
-                    b.HasOne("ProjectTracker.Models.Person", null)
-                        .WithMany()
-                        .HasForeignKey("PersonsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Persons")
+                        .HasForeignKey("ProjectId");
 
                     b.HasOne("ProjectTracker.Models.ProjectItem", null)
-                        .WithMany()
-                        .HasForeignKey("ProjectItemsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("PersonList")
+                        .HasForeignKey("ProjectItemId");
                 });
 
             modelBuilder.Entity("ProjectTracker.Models.ProjectItem", b =>
                 {
-                    b.HasOne("ProjectTracker.Models.Project", "Project")
-                        .WithMany("ProjectItems")
+                    b.HasOne("ProjectTracker.Models.Project", null)
+                        .WithMany("Tasks")
                         .HasForeignKey("ProjectId");
-
-                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("ProjectTracker.Models.Project", b =>
                 {
-                    b.Navigation("ProjectItems");
+                    b.Navigation("Persons");
+
+                    b.Navigation("Tasks");
+                });
+
+            modelBuilder.Entity("ProjectTracker.Models.ProjectItem", b =>
+                {
+                    b.Navigation("PersonList");
                 });
 #pragma warning restore 612, 618
         }
