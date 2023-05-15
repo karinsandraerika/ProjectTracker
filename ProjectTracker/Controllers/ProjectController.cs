@@ -27,7 +27,7 @@ namespace ProjectTracker.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Project>))]
+        //[ProducesResponseType(200, Type = typeof(IEnumerable<Project>))]
         public IActionResult GetProjects()
         {
             var projects = _mapper.Map<List<ProjectDto>>(_projectRepository.GetProjects());
@@ -47,7 +47,7 @@ namespace ProjectTracker.Controllers
                 return NotFound();
             }
 
-            var project = _projectRepository.GetProject(id);
+            var project = _mapper.Map<ProjectDto>(_projectRepository.GetProject(id));
 
             if (!ModelState.IsValid)
             {
@@ -65,7 +65,6 @@ namespace ProjectTracker.Controllers
                 return BadRequest(ModelState);
             }
 
-            
             var project = _projectRepository.GetProjects().Where(p => p.Name.Trim().ToUpper() == newProject.Name.Trim().ToUpper())
                 .FirstOrDefault();
 
@@ -91,40 +90,65 @@ namespace ProjectTracker.Controllers
             return Ok("Sucessfully added");
         }
 
-
-        /*
-        // GET: api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpPut("{projectId}")]
+        public IActionResult UpdateProject(int projectId, [FromBody] ProjectDto projectInfo)
         {
-            return new string[] { "value1", "value2" };
+            if (projectInfo == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (projectId != projectInfo.Id)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_projectRepository.ProjectExists(projectId))
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var projectMap = _mapper.Map<Project>(projectInfo);
+
+            if (!_projectRepository.UpdateProject(projectMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating");
+                return StatusCode(500, ModelState);
+            }
+
+            //return NoContent();
+            return Ok("Succesfully updated");
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult DeleteProject(int id)
         {
+            if (!_projectRepository.ProjectExists(id))
+            {
+                return NotFound();
+            }
+
+            var projectDelete = _projectRepository.GetProject(id);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_projectRepository.DeleteProject(projectDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong while deleting");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Succesfully deleted");
         }
-        */
+
     }
 }
 

@@ -15,8 +15,7 @@ namespace ProjectTracker.Controllers
     public class ProjectItemController : ControllerBase
 	{
         private readonly IProjectItemRepository _projectItemRepository;
-        private readonly IProjectRepository _projectRepository;
-            
+        private readonly IProjectRepository _projectRepository;  
         private readonly IMapper _mapper;
 
         public ProjectItemController(IProjectItemRepository projectItemRepository, IProjectRepository projectRepository, IMapper mapper)
@@ -27,7 +26,7 @@ namespace ProjectTracker.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(200, Type =typeof(IEnumerable<ProjectItem>))]
+        //[ProducesResponseType(200, Type =typeof(IEnumerable<ProjectItem>))]
         public IActionResult GetProjectItems()
         {
             var projectItems = _mapper.Map<List<ProjectItemDto>>(_projectItemRepository.GetProjectItems());
@@ -47,7 +46,7 @@ namespace ProjectTracker.Controllers
                 return NotFound();
             }
 
-            var projectItem = _projectItemRepository.GetProjectItem(id);
+            var projectItem = _mapper.Map<ProjectItemDto>(_projectItemRepository.GetProjectItem(id));
 
             if (!ModelState.IsValid)
             {
@@ -58,7 +57,7 @@ namespace ProjectTracker.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostProjectItem([FromBody] ProjectItemDto newProjectItem)
+        public IActionResult PostProjectItem([FromQuery] int projectId, [FromBody] ProjectItemDto newProjectItem)
         {
             if (newProjectItem == null)
             {
@@ -71,8 +70,7 @@ namespace ProjectTracker.Controllers
             }
 
             var projectItemMap = _mapper.Map<ProjectItem>(newProjectItem);
-            //What happens when there are no projects or the id is wrong?
-            //projectItemMap.Project = _projectRepository.GetProject();
+            projectItemMap.Project = _projectRepository.GetProject(projectId);
 
             if (!_projectItemRepository.CreateProjectItem(projectItemMap))
             {
@@ -83,50 +81,64 @@ namespace ProjectTracker.Controllers
             return Ok("Sucessfully added");
         }
 
-        /*
-        [HttpGet]
-        public  List<ProjectItem> GetProjectItems()
+        [HttpPut("{projectItemId}")]
+        public IActionResult UpdateProject(int projectItemId, [FromBody] ProjectItemDto projectItemInfo)
         {
-            return DatabaseContext.ProjectItem.ToList();
-        }
+            if (projectItemInfo == null)
+            {
+                return BadRequest(ModelState);
+            }
 
-        
-        [HttpGet("{id}")]
-        public ActionResult<ProjectItem> GetProjectItem(int id)
-        {
-            ProjectItem item = DatabaseContext.ProjectItem.Find(id);
-            if (item == null)
+            if (projectItemId != projectItemInfo.Id)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_projectItemRepository.ProjectItemExists(projectItemId))
             {
                 return NotFound();
             }
-            return item; ;
-        }
 
-        [HttpPut("{id}")]
-        public IActionResult PutProjectItem(int id, ProjectItem item)
-        {
-            if (id != item.Id)
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            DatabaseContext.Entry(item).State = EntityState.Modified;
+            var projectItemMap = _mapper.Map<ProjectItem>(projectItemInfo);
 
-      
-            DatabaseContext.SaveChanges();
+            if (!_projectItemRepository.UpdateProjectItem(projectItemMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating");
+                return StatusCode(500, ModelState);
+            }
 
-            return NoContent();
+            //return NoContent();
+            return Ok("Succesfully updated");
         }
 
-        [HttpPost]
-        public ActionResult<ProjectItem> PostProjectItem(ProjectItem item)
+        [HttpDelete("{id}")]
+        public IActionResult DeleteProjectItem(int id)
         {
-            
-            DatabaseContext.ProjectItem.Add(item);
-            DatabaseContext.SaveChanges();
+            if (!_projectItemRepository.ProjectItemExists(id))
+            {
+                return NotFound();
+            }
 
-            return CreatedAtAction(nameof(GetProjectItem), new { id = item.Id }, item);
+            var projectItemDelete = _projectItemRepository.GetProjectItem(id);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_projectItemRepository.DeleteProjectItem(projectItemDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong while deleting");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Succesfully deleted");
         }
-        */
+
     }
 }
