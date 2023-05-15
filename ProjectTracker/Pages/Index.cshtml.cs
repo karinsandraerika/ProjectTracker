@@ -27,6 +27,29 @@ public class IndexModel : PageModel
         Projects = _context.Project.ToList();
     }
 
+    [BindProperty]
+    public Project Project { get; set; } = default!;
+
+
+    public ActionResult OnPost()
+    {
+        if (ModelState.IsValid)
+        {
+            _context.Project.Add(Project);
+            _context.SaveChanges();
+            return RedirectToPage("/Index");
+        }
+        return Page();
+    }
+
+    public ActionResult OnPostDelete(int id)
+    {
+        Project projectToDelete = _context.Project.SingleOrDefault(p => p.Id == id);
+        _context.Project.Remove(projectToDelete);
+        _context.SaveChanges();
+        return RedirectToPage("/Index");
+    }
+
 }
 
      

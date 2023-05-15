@@ -34,8 +34,8 @@ namespace ProjectTracker.Pages;
                 _context.SaveChanges();
                 return RedirectToPage("./Persons");
             }
-            return Page();
-        }
+            return RedirectToPage("./Persons");
+    }
 
         public ActionResult OnPostDelete(int id)
         {

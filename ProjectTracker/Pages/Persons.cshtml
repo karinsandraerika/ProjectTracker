@@ -17,6 +17,9 @@
                 @Html.DisplayNameFor(model => model.Persons[0].Name)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Persons[0].Username)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Persons[0].Email)
             </th>
             <th>
@@ -36,6 +39,9 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.Username)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.Email)
                 </td>
                 <td>
@@ -53,13 +59,30 @@
     </tbody>
 </table>
 
-<form method="post">
-    <input asp-for="@Model.person.Name" />
-    <p><span asp-validation-for="@Model.person.Name"></span></p>
-    <input asp-for="@Model.person.Email" />
-    <p><span asp-validation-for="@Model.person.Email"></span></p>
-    <input asp-for="@Model.person.PhoneNumber" />
-    <p><span asp-validation-for="@Model.person.PhoneNumber"></span></p>
-    <button type="submit">Create</button>
+<h2>Create Person</h2>
+
+<form method="post" class="form">
+    <div class="form-group">
+        <label asp-for="@Model.person.Username" class="form-label"></label>
+        <input asp-for="@Model.person.Username" class="form-control" />
+        <span asp-validation-for="@Model.person.Username" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.person.Name" class="form-label"></label>
+        <input asp-for="@Model.person.Name" class="form-control" />
+        <span asp-validation-for="@Model.person.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.person.Email" class="form-label"></label>
+        <input asp-for="@Model.person.Email" class="form-control" />
+        <span asp-validation-for="@Model.person.Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.person.PhoneNumber" class="form-label"></label>
+        <input asp-for="@Model.person.PhoneNumber" class="form-control" />
+        <span asp-validation-for="@Model.person.PhoneNumber" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
 </form>
+
 
