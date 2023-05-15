@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace ProjectTracker.Controllers
         private readonly IPersonRepository _personRepository;
         private readonly IMapper _mapper;
 
-        public PersonController(IPersonRepository personRepository, IMapper mapper)
+        public PersonController(IPersonRepository personRepository,IMapper mapper)
         {
             _personRepository = personRepository;
             _mapper = mapper;
@@ -31,7 +32,8 @@ namespace ProjectTracker.Controllers
         //[ProducesResponseType(200, Type = typeof(IEnumerable<Person>))]
         public IActionResult GetPersons()
         {
-            var persons = _mapper.Map<List<PersonDto>>(_personRepository.GetPersons());
+            //var persons = _mapper.Map<List<PersonDto>>(_personRepository.GetPersons());
+            var persons = _personRepository.GetPersons();
             if (!ModelState.IsValid)
             {
                 return BadRequest();
@@ -48,7 +50,8 @@ namespace ProjectTracker.Controllers
                 return NotFound();
             }
 
-            var person = _mapper.Map<PersonDto>(_personRepository.GetPerson(id));
+            //var person = _mapper.Map<PersonDto>(_personRepository.GetPerson(id));
+            var person = _personRepository.GetPerson(id);
 
             if (!ModelState.IsValid)
             {
@@ -79,9 +82,9 @@ namespace ProjectTracker.Controllers
                 return BadRequest(ModelState);
             }
 
-            var personMap = _mapper.Map<Person>(newPerson);
+            //var personMap = _mapper.Map<Person>(newPerson);
 
-            if (!_personRepository.CreatePerson(personMap))
+            if (!_personRepository.CreatePerson(newPerson))
             {
                 ModelState.AddModelError("", "Something went wrong while saving");
                 return StatusCode(500, ModelState);
@@ -112,18 +115,16 @@ namespace ProjectTracker.Controllers
             {
                 return BadRequest();
             }
-
-            var personMap = _mapper.Map<Person>(personInfo);
-
-            if (!_personRepository.UpdatePerson(personMap))
+            
+            if (!_personRepository.UpdatePerson(personInfo))
             {
                 ModelState.AddModelError("", "Something went wrong while updating");
                 return StatusCode(500, ModelState);
             }
 
-            //return NoContent();
             return Ok("Succesfully updated");
         }
+
 
         [HttpDelete("{id}")]
         public IActionResult DeletePerson(int id)
@@ -133,7 +134,8 @@ namespace ProjectTracker.Controllers
                 return NotFound();
             }
 
-            var personDelete = _personRepository.GetPerson(id);
+            //var personDelete = _personRepository.GetPerson(id);
+            var personDelete = _mapper.Map<Person>(_personRepository.GetPerson(id));
 
             if (!ModelState.IsValid)
             {

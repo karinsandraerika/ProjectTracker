@@ -1,6 +1,8 @@
 ﻿using System;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ProjectTracker.Data;
+using ProjectTracker.Dto;
 using ProjectTracker.Interfaces;
 using ProjectTracker.Models;
 
@@ -14,17 +16,66 @@ namespace ProjectTracker.Repository
 		{
             _context = context;
         }
-
+/*
         public Person GetPerson(int id)
         {
             return _context.Person.Where(pe => pe.Id == id).FirstOrDefault();
         }
+*/
 
-        public ICollection<Person> GetPersons()
+        public PersonDto GetPerson(int id)
+        {
+            Person? person = _context.Person.Include(pe => pe.ProjectItems).Include(pe => pe.Projects).FirstOrDefault(pe => pe.Id == id);
+            PersonDto personDto = new PersonDto()
+            {
+                Id = person.Id,
+                Name = person.Name,
+                Email = person.Email,
+                Username = person.Username,
+                PhoneNumber = person.PhoneNumber
+            };
+            if (person.ProjectItems != null)
+            {
+                List<int> projectItemsIds = person.ProjectItems.Select(pi => pi.Id).ToList();
+                personDto.ProjectItems = projectItemsIds;
+            }
+            if (person.Projects != null)
+            {
+                List<int> projectIds = person.Projects.Select(pi => pi.Id).ToList();
+                personDto.Projects = projectIds;
+            }
+            return personDto;
+        }
+
+        public ICollection<PersonDto> GetPersons()
         {
             // Include the list of projectitems (which will also include the list of persons inside projectitems).
-            //return _context.Person.Include(pe => pe.ProjectItems).ToList();
-            return _context.Person.ToList();
+            var persons = _context.Person.Include(pe => pe.ProjectItems).Include(pe => pe.Projects).ToList();
+            List <PersonDto> personDtos = new List<PersonDto>();
+            foreach (var person in persons)
+            {
+                var personDto = new PersonDto()
+                {
+                    Id = person.Id,
+                    Name = person.Name,
+                    Email = person.Email,
+                    Username = person.Username,
+                    PhoneNumber = person.PhoneNumber
+                };
+                if (person.ProjectItems != null)
+                {
+                    List<int> projectItemsIds = person.ProjectItems.Select(pi => pi.Id).ToList();
+                    personDto.ProjectItems = projectItemsIds;
+                }
+                if (person.Projects != null)
+                {
+                    List<int> projectIds = person.Projects.Select(pi => pi.Id).ToList();
+                    personDto.Projects = projectIds;
+                }
+                personDtos.Add(personDto);
+            }
+            return personDtos;
+            //return _context.Person.ToList();
         }
 
         /*
@@ -40,14 +91,51 @@ namespace ProjectTracker.Repository
             return _context.Person.Any(p => p.Id == id);
         }
 
-        public bool CreatePerson(Person person)
+        public bool CreatePerson(PersonDto newPerson)
         {
+            var person = new Person()
+            {
+                Id = newPerson.Id,
+                Email = newPerson.Email,
+                Name = newPerson.Name,
+                PhoneNumber = newPerson.PhoneNumber,
+                Username = newPerson.Username
+            };
+
+            if (newPerson.ProjectItems != null)
+            {
+                var projectItems = _context.ProjectItem.Where(pi => newPerson.ProjectItems.Contains(pi.Id)).ToList();
+                person.ProjectItems = projectItems;
+            }
+            if (newPerson.Projects != null)
+            {
+                var projects = _context.Project.Where(pi => newPerson.Projects.Contains(pi.Id)).ToList();
+                person.Projects = projects;
+            }
+           
             _context.Add(person);
             return Save();
         }
 
-        public bool UpdatePerson(Person person)
+        public bool UpdatePerson(PersonDto personInfo)
         {
+            var person = _context.Person.Include(pe => pe.ProjectItems).Include(pe => pe.Projects).
+                FirstOrDefault(pe => pe.Id == personInfo.Id);
+            if (person == null)
+            {
+                return false;
+            }
+            if (personInfo.ProjectItems != null)
+            {
+                var projectItems = _context.ProjectItem.Where(pi => personInfo.ProjectItems.Contains(pi.Id)).ToList();
+                person.ProjectItems = projectItems;
+            }
+            if (personInfo.Projects != null)
+            {
+                var projects = _context.Project.Where(pi => personInfo.Projects.Contains(pi.Id)).ToList();
+                person.Projects = projects;
+            }
+
             _context.Update(person);
             return Save();
         }

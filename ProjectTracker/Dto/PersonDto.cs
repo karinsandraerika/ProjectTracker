@@ -12,7 +12,8 @@ namespace ProjectTracker.Dto
         public string? Username { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
-        //public List<ProjectItem>? ProjectItems { get; set; }
+        public List<int>? ProjectItems { get; set; }
+        public List<int>? Projects { get; set; }
     }
 }
 
