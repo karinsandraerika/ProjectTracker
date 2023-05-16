@@ -2,17 +2,21 @@
 @model ProjectTracker.Pages.CreateProjectModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Project";
 }
 
-<h1>Create</h1>
+<h1>New Project</h1>
 
-<h4>New Project</h4>
-
-<form method="post">
-    <input asp-for="@Model.Project.Name" />
-    <p><span asp-validation-for="@Model.Project.Name"></span></p>
-    <input asp-for="@Model.Project.Description" />
-    <p><span asp-validation-for="@Model.Project.Description"></span></p>
-    <button type="submit">Create</button>
+<form method="post" class="form">
+    <div class="form-group">
+        <label asp-for="@Model.Project.Name" class="form-label"></label>
+        <input asp-for="@Model.Project.Name" class="form-control" />
+        <p><span asp-validation-for="@Model.Project.Name" class="text-danger"></span></p>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.Project.Description" class="form-label"></label>
+        <input asp-for="@Model.Project.Description" class="form-control" />
+        <p><span asp-validation-for="@Model.Project.Description" class="text-danger"></span></p>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
 </form>

@@ -9,7 +9,7 @@ using ProjectTracker.Models;
 
 namespace ProjectTracker.Pages
 {
-	public class CreateProjectModel : PageModel
+    public class CreateProjectModel : PageModel
     {
         private readonly DatabaseContext _context;
 
@@ -20,7 +20,7 @@ namespace ProjectTracker.Pages
 
         public void OnGet()
         {
-        
+
         }
 
 
@@ -28,15 +28,15 @@ namespace ProjectTracker.Pages
         public Project Project { get; set; } = default!;
 
 
-        public ActionResult OnPost() 
+        public ActionResult OnPost()
         {
-            if (ModelState.IsValid) 
+            if (ModelState.IsValid)
             {
-                _context.Project.Add(Project); 
-                _context.SaveChanges(); 
+                _context.Project.Add(Project);
+                _context.SaveChanges();
                 return RedirectToPage("/Index");
             }
-            return Page(); 
+            return Page();
         }
     }
 }
