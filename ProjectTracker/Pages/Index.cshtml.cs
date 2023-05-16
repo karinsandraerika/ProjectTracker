@@ -27,20 +27,20 @@ public class IndexModel : PageModel
         Projects = _context.Project.ToList();
     }
 
-    [BindProperty]
-    public Project Project { get; set; } = default!;
+    //[BindProperty]
+    //public Project Project { get; set; } = default!;
 
 
-    public ActionResult OnPost()
-    {
-        if (ModelState.IsValid)
-        {
-            _context.Project.Add(Project);
-            _context.SaveChanges();
-            return RedirectToPage("/Index");
-        }
-        return Page();
-    }
+    //public ActionResult OnPost()
+    //{
+    //    if (ModelState.IsValid)
+    //    {
+    //        _context.Project.Add(Project);
+    //        _context.SaveChanges();
+    //        return RedirectToPage("/Index");
+    //    }
+    //    return Page();
+    //}
 
     public ActionResult OnPostDelete(int id)
     {
@@ -49,6 +49,12 @@ public class IndexModel : PageModel
         _context.SaveChanges();
         return RedirectToPage("/Index");
     }
+
+    //public ActionResult OnPostAddProject()
+    //{
+    //    return RedirectToPage("/CreateProject");
+    //}
+
 
 }
 

@@ -1,0 +1,58 @@
+﻿@page
+@model ProjectTracker.Pages.CreateProjectItemModel
+@{
+}
+@{
+    ViewData["Title"] = "Create Project Item";
+}
+
+<h1>New Project Item</h1>
+
+<form method="post" class="form">
+    <div class="form-group">
+        <label asp-for="@Model.projectItem.Name" class="form-label"></label>
+        <input asp-for="@Model.projectItem.Name" class="form-control" />
+        <span asp-validation-for="@Model.projectItem.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.projectItem.Description" class="form-label"></label>
+        <input asp-for="@Model.projectItem.Description" class="form-control" />
+        <span asp-validation-for="@Model.projectItem.Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="SelectedImportance" class="form-label">Importance</label>
+        <select name="SelectedImportance" asp-for="@Model.projectItem.Importance" asp-items="@Model.ImportanceOptions" class="form-control">
+            <option value="">-- Select Importance --</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="SelectedCompletionStatus" class="form-label">Completed</label>
+        <select name="SelectedCompletionStatus" asp-for="@Model.projectItem.Completed" asp-items="Model.CompletionOptions" class="form-control">
+            <option value="">-- Select Completion Status --</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.projectItem.StartDate" class="form-label"></label>
+        <input asp-for="@Model.projectItem.StartDate" class="form-control" />
+        <span asp-validation-for="@Model.projectItem.StartDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.projectItem.EndDate" class="form-label"></label>
+        <input asp-for="@Model.projectItem.EndDate" class="form-control" />
+        <span asp-validation-for="@Model.projectItem.EndDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.projectItem.TimeToComplete" class="form-label"></label>
+        <input asp-for="@Model.projectItem.TimeToComplete" class="form-control" />
+        <span asp-validation-for="@Model.projectItem.TimeToComplete" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.projectItem.Persons" class="form-label">Persons</label>
+        <select name="selectedPersons" asp-for="@Model.projectItem.Persons" asp-items="@Model.PersonListItems" class="form-control" multiple></select>
+    </div>
+    <input type="hidden" asp-for="projectId" />
+    <button type="submit" class="btn btn-success">Create</button>
+</form>
+
+
+
