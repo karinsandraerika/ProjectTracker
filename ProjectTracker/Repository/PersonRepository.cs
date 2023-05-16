@@ -16,12 +16,12 @@ namespace ProjectTracker.Repository
 		{
             _context = context;
         }
-/*
+        /*
         public Person GetPerson(int id)
         {
             return _context.Person.Where(pe => pe.Id == id).FirstOrDefault();
         }
-*/
+        */
 
         public PersonDto GetPerson(int id)
         {
@@ -32,24 +32,15 @@ namespace ProjectTracker.Repository
                 Name = person.Name,
                 Email = person.Email,
                 Username = person.Username,
-                PhoneNumber = person.PhoneNumber
+                PhoneNumber = person.PhoneNumber,
+                ProjectItems = person.ProjectItems != null ? person.ProjectItems.Select(p => p.Id).ToList() : null,
+                Projects = person.Projects != null ? person.Projects.Select(p => p.Id).ToList() : null
             };
-            if (person.ProjectItems != null)
-            {
-                List<int> projectItemsIds = person.ProjectItems.Select(pi => pi.Id).ToList();
-                personDto.ProjectItems = projectItemsIds;
-            }
-            if (person.Projects != null)
-            {
-                List<int> projectIds = person.Projects.Select(pi => pi.Id).ToList();
-                personDto.Projects = projectIds;
-            }
             return personDto;
         }
 
         public ICollection<PersonDto> GetPersons()
         {
-            // Include the list of projectitems (which will also include the list of persons inside projectitems).
             var persons = _context.Person.Include(pe => pe.ProjectItems).Include(pe => pe.Projects).ToList();
             List <PersonDto> personDtos = new List<PersonDto>();
             foreach (var person in persons)
@@ -60,22 +51,13 @@ namespace ProjectTracker.Repository
                     Name = person.Name,
                     Email = person.Email,
                     Username = person.Username,
-                    PhoneNumber = person.PhoneNumber
+                    PhoneNumber = person.PhoneNumber,
+                    ProjectItems = person.ProjectItems != null ? person.ProjectItems.Select(p => p.Id).ToList() : null,
+                    Projects = person.Projects != null ? person.Projects.Select(p => p.Id).ToList() : null
                 };
-                if (person.ProjectItems != null)
-                {
-                    List<int> projectItemsIds = person.ProjectItems.Select(pi => pi.Id).ToList();
-                    personDto.ProjectItems = projectItemsIds;
-                }
-                if (person.Projects != null)
-                {
-                    List<int> projectIds = person.Projects.Select(pi => pi.Id).ToList();
-                    personDto.Projects = projectIds;
-                }
                 personDtos.Add(personDto);
             }
             return personDtos;
-            //return _context.Person.ToList();
         }
 
         /*
@@ -99,20 +81,10 @@ namespace ProjectTracker.Repository
                 Email = newPerson.Email,
                 Name = newPerson.Name,
                 PhoneNumber = newPerson.PhoneNumber,
-                Username = newPerson.Username
-            };
-
-            if (newPerson.ProjectItems != null)
-            {
-                var projectItems = _context.ProjectItem.Where(pi => newPerson.ProjectItems.Contains(pi.Id)).ToList();
-                person.ProjectItems = projectItems;
-            }
-            if (newPerson.Projects != null)
-            {
-                var projects = _context.Project.Where(pi => newPerson.Projects.Contains(pi.Id)).ToList();
-                person.Projects = projects;
-            }
-           
+                Username = newPerson.Username,
+                ProjectItems = newPerson.ProjectItems != null ? _context.ProjectItem.Where(pi => newPerson.ProjectItems.Contains(pi.Id)).ToList() : null,
+                Projects = newPerson.Projects != null ? _context.Project.Where(pi => newPerson.Projects.Contains(pi.Id)).ToList() : null
+        };
             _context.Add(person);
             return Save();
         }

@@ -28,11 +28,8 @@ namespace ProjectTracker.Controllers
         }
 
         [HttpGet]
-        //[Route("getallpersons")]
-        //[ProducesResponseType(200, Type = typeof(IEnumerable<Person>))]
         public IActionResult GetPersons()
         {
-            //var persons = _mapper.Map<List<PersonDto>>(_personRepository.GetPersons());
             var persons = _personRepository.GetPersons();
             if (!ModelState.IsValid)
             {

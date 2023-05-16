@@ -8,6 +8,8 @@ namespace ProjectTracker.Dto
         public int Id { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
+        public List<int> Persons { get; set; }
+        public List<int> ProjectItems { get; set; }
     }
 }
 

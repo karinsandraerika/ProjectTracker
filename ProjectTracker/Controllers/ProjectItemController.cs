@@ -26,10 +26,10 @@ namespace ProjectTracker.Controllers
         }
 
         [HttpGet]
-        //[ProducesResponseType(200, Type =typeof(IEnumerable<ProjectItem>))]
         public IActionResult GetProjectItems()
         {
-            var projectItems = _mapper.Map<List<ProjectItemDto>>(_projectItemRepository.GetProjectItems());
+            //var projectItems = _mapper.Map<List<ProjectItemDto>>(_projectItemRepository.GetProjectItems());
+            var projectItems = _projectItemRepository.GetProjectItems();
             if (!ModelState.IsValid)
             {
                 return BadRequest();
@@ -46,7 +46,8 @@ namespace ProjectTracker.Controllers
                 return NotFound();
             }
 
-            var projectItem = _mapper.Map<ProjectItemDto>(_projectItemRepository.GetProjectItem(id));
+            //var projectItem = _mapper.Map<ProjectItemDto>(_projectItemRepository.GetProjectItem(id));
+            var projectItem = _projectItemRepository.GetProjectItem(id);
 
             if (!ModelState.IsValid)
             {
@@ -57,7 +58,7 @@ namespace ProjectTracker.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostProjectItem([FromQuery] int projectId, [FromBody] ProjectItemDto newProjectItem)
+        public IActionResult PostProjectItem([FromBody] ProjectItemDto newProjectItem)
         {
             if (newProjectItem == null)
             {
@@ -69,10 +70,10 @@ namespace ProjectTracker.Controllers
                 return BadRequest(ModelState);
             }
 
-            var projectItemMap = _mapper.Map<ProjectItem>(newProjectItem);
-            projectItemMap.Project = _projectRepository.GetProject(projectId);
+            //var projectItemMap = _mapper.Map<ProjectItem>(newProjectItem);
+            //projectItemMap.Project = _projectRepository.GetProject(projectId);
 
-            if (!_projectItemRepository.CreateProjectItem(projectItemMap))
+            if (!_projectItemRepository.CreateProjectItem(newProjectItem))
             {
                 ModelState.AddModelError("", "Something went wrong hile saving");
                 return StatusCode(500, ModelState);
@@ -104,9 +105,9 @@ namespace ProjectTracker.Controllers
                 return BadRequest();
             }
 
-            var projectItemMap = _mapper.Map<ProjectItem>(projectItemInfo);
+            //var projectItemMap = _mapper.Map<ProjectItem>(projectItemInfo);
 
-            if (!_projectItemRepository.UpdateProjectItem(projectItemMap))
+            if (!_projectItemRepository.UpdateProjectItem(projectItemInfo))
             {
                 ModelState.AddModelError("", "Something went wrong while updating");
                 return StatusCode(500, ModelState);
@@ -123,8 +124,8 @@ namespace ProjectTracker.Controllers
             {
                 return NotFound();
             }
-
-            var projectItemDelete = _projectItemRepository.GetProjectItem(id);
+            var projectItemDelete = _mapper.Map<ProjectItem>(_projectItemRepository.GetProjectItem(id));
+            //var projectItemDelete = _projectItemRepository.GetProjectItem(id);
 
             if (!ModelState.IsValid)
             {
