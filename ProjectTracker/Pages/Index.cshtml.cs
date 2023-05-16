@@ -50,6 +50,12 @@ public class IndexModel : PageModel
         return RedirectToPage("/Index");
     }
 
+    //public ActionResult OnPostAddProject()
+    //{
+    //    return RedirectToPage("/CreateProject");
+    //}
+
+
 }
 
      

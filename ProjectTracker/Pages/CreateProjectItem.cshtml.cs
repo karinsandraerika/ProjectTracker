@@ -32,12 +32,12 @@ namespace ProjectTracker.Pages
         public CompletionStatus SelectedCompletionStatus { get; set; }
         public List<SelectListItem> CompletionOptions { get; set; }
 
-        public int projectId;
-        public Project project { get; set; }
+        [BindProperty]
+        public int projectId { get; set; }
 
         public void OnGet(int id)
         {
-            project = _context.Project.FirstOrDefault(p => p.Id == id);
+            projectId = id;
 
             // Create lists for dropdown boxes, for persons and enums
             var persons = _context.Person.ToList();
@@ -81,7 +81,7 @@ namespace ProjectTracker.Pages
                 }
             }
 
-            projectItem.Project = project;
+            projectItem.Project = _context.Project.FirstOrDefault(p => p.Id == projectId);
 
             if (ModelState.IsValid)
             {
@@ -97,7 +97,7 @@ namespace ProjectTracker.Pages
                 _context.ProjectItem.Add(projectItem);
                 _context.SaveChanges();
             }
-            return RedirectToPage("./ProjectItems", new { id = projectId });
+            return RedirectToPage("./ProjectDetails", new { id = projectId });
         }
     }
 }

@@ -47,7 +47,8 @@
         <label asp-for="@Model.projectItem.Persons" class="form-label">Persons</label>
         <select name="selectedPersons" asp-for="@Model.projectItem.Persons" asp-items="@Model.PersonListItems" class="form-control" multiple></select>
     </div>
-    <button type="submit" class="btn btn-primary">Create</button>
+    <input type="hidden" asp-for="projectId"/>
+    <button type="submit" class="btn btn-success">Create</button>
 </form>
 
 

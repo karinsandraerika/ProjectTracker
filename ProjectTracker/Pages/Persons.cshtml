@@ -30,7 +30,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    <a href="/PersonDetails?id=@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Username)
@@ -42,10 +42,8 @@
                     @Html.DisplayFor(modelItem => item.PhoneNumber)
                 </td>
                 <td>
-                    <a asp-page="./Index" asp-route-id="@item.Id">Projects</a> |
-                    <a asp-page="./ProjectItems" asp-route-id="@item.Id">Project Items</a> |
                     <form method="post">
-                        <button asp-page-handler="Delete" asp-route-id="@item.Id" type="submit">Delete</button>
+                        <button class="btn btn-danger" asp-page-handler="Delete" asp-route-id="@item.Id" type="submit">Delete</button>
                     </form>
                 </td>
             </tr>

@@ -39,7 +39,7 @@ public class ProjectItemsModel : PageModel
 
         // select all ProjectItems where Project Id = id
         // Include Project and Persons list 
-        ProjectItems = _context.ProjectItem.Where(pItem => pItem.Project.Id == id)
+        ProjectItems = _context.ProjectItem
             .Include(pItems => pItems.Project).Include(pItems => pItems.Persons).ToList();
 
 

@@ -20,18 +20,25 @@ namespace ProjectTracker.Pages
             _context = context;
         }
         public List<Models.ProjectItem> ProjectItems { get; set; } = default!;
-
         public Models.Project project { get; set; }
+
+        [BindProperty]
+        public int ProjectId { get; set; }
+
+        public List<Person> persons { get; set; }
+
 
         public void OnGet(int id)
         {
             project = _context.Project.SingleOrDefault(p => p.Id == id);
+            ProjectId = id;
 
             // select all ProjectItems where Project Id = id
-            // Include Project and Persons list 
+            // Include Persons id list 
             ProjectItems = _context.ProjectItem.Where(pItem => pItem.Project.Id == id)
-                .Include(pItems => pItems.Project).Include(pItems => pItems.Persons).ToList();
-
+                .Include(pItems => pItems.Persons).ToList();
+            
+            
         }
 
         public ActionResult OnPostDelete(int id)
@@ -41,6 +48,11 @@ namespace ProjectTracker.Pages
             _context.SaveChanges();
             return RedirectToPage("/ProjectDetails");
         }
+
+        //public ActionResult OnPostAddItem()
+        //{
+        //    return RedirectToPage("./CreateProjectItem", new { id = ProjectId });
+        //}
     }
 
 }
