@@ -41,12 +41,6 @@ namespace ProjectTracker.Pages
         }
 
         
-      
-
-        private bool ProjectItemExists(int id)
-        {
-            return (_context.ProjectItem?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
     }
 }
 

@@ -2,8 +2,11 @@
 @model ProjectTracker.Pages.CreateProjectItemModel
 @{
 }
+@{
+    ViewData["Title"] = "Create Project Item";
+}
 
-<h2>New Project Item</h2>
+<h1>New Project Item</h1>
 
 <form method="post" class="form">
     <div class="form-group">
@@ -47,7 +50,7 @@
         <label asp-for="@Model.projectItem.Persons" class="form-label">Persons</label>
         <select name="selectedPersons" asp-for="@Model.projectItem.Persons" asp-items="@Model.PersonListItems" class="form-control" multiple></select>
     </div>
-    <input type="hidden" asp-for="projectId"/>
+    <input type="hidden" asp-for="projectId" />
     <button type="submit" class="btn btn-success">Create</button>
 </form>
 
