@@ -46,13 +46,9 @@ namespace ProjectTracker.Pages
             Models.ProjectItem itemToDelete = _context.ProjectItem.SingleOrDefault(p => p.Id == id);
             _context.ProjectItem.Remove(itemToDelete);
             _context.SaveChanges();
-            return RedirectToPage("/ProjectDetails");
+            return RedirectToPage("/ProjectDetails", new { id = ProjectId });
         }
 
-        //public ActionResult OnPostAddItem()
-        //{
-        //    return RedirectToPage("./CreateProjectItem", new { id = ProjectId });
-        //}
     }
 
 }

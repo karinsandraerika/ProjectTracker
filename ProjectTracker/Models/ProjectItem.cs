@@ -20,8 +20,8 @@ namespace ProjectTracker.Models
         [DataType(DataType.Date)]
         [Display(Name = "End Date")]
         public DateTime EndDate { get; set; }
-        [Display(Name = "Time to complete")]
-        public TimeSpan TimeToComplete { get; set; }
+        [Display(Name = "Hours to complete")]
+        public int HoursToComplete { get; set; }
         public Project? Project { get; set; }
     }
 }

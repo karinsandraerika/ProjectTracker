@@ -85,6 +85,7 @@
                     @*<a asp-page="./Index" asp-route-id="@item.Id">Project</a> |
                         <a asp-page="./Persons" asp-route-id="@item.Id">Persons</a> |*@
                     <form method="post">
+                        <input type="hidden" asp-for="ProjectId" />
                         <button class="btn btn-danger" asp-page-handler="Delete" asp-route-id="@item.Id" type="submit">Delete</button>
                     </form>
                 </td>
@@ -92,11 +93,6 @@
         }
     </tbody>
 </table>
-
-    @*<form method="post">
-            <input type="hidden" asp-for="ProjectId" />
-            <button asp-page-handler="AddItem" asp-route-id="@Model.ProjectId" type="submit">Add item</button>
-        </form>*@
 
     <a class="btn btn-success" role="button" asp-page="./CreateProjectItem" asp-route-id="@Model.ProjectId">Add Item</a>
 
