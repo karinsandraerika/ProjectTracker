@@ -93,6 +93,7 @@ namespace ProjectTracker.Controllers
         [HttpPut("{personId}")]
         public IActionResult UpdatePerson(int personId, [FromBody] PersonDto personInfo)
         {
+            //TODO maybe remove int personId
             if (personInfo == null)
             {
                 return BadRequest(ModelState);

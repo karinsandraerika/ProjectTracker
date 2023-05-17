@@ -1,15 +1,18 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace ProjectTracker.Dto
+namespace ClientProjectPlanner
 {
-	public class ProjectDto
+	public class Project
 	{
         public int Id { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
         public List<int>? Persons { get; set; }
         public List<int>? ProjectItems { get; set; }
+
+        public void PrintProject()
+        {
+            Console.WriteLine("Id: " + Id + ", Name: " + Name + ", Description: " + Description);
+        }
     }
 }
 

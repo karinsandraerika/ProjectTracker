@@ -1,5 +1,7 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore;
 using ProjectTracker.Data;
+using ProjectTracker.Dto;
 using ProjectTracker.Interfaces;
 using ProjectTracker.Models;
 
@@ -14,14 +16,37 @@ namespace ProjectTracker.Repository
             _context = context;
         }
 
-        public Project GetProject(int id)
+        public ProjectDto GetProject(int id)
         {
-            return _context.Project.Where(pr => pr.Id == id).FirstOrDefault();
+            Project? project = _context.Project.Include(p => p.ProjectItems).Include(p => p.Persons).FirstOrDefault(p => p.Id == id);
+            ProjectDto projectDto = new ProjectDto()
+            {
+                Id = project.Id,
+                Name = project.Name,
+                Description = project.Description,
+                Persons = project.Persons != null ? project.Persons.Select(p => p.Id).ToList() : null,
+                ProjectItems = project.ProjectItems != null ? project.ProjectItems.Select(p => p.Id).ToList() : null
+            };
+            return projectDto;
         }
 
-        public ICollection<Project> GetProjects()
+        public ICollection<ProjectDto> GetProjects()
         {
-            return _context.Project.ToList();
+            var projects = _context.Project.Include(p => p.ProjectItems).Include(p => p.Persons).ToList();
+            List<ProjectDto> projectDtos = new List<ProjectDto>();
+            foreach (var project in projects)
+            {
+                var projectDto = new ProjectDto()
+                {
+                    Id = project.Id,
+                    Name = project.Name,
+                    Description = project.Description,
+                    Persons = project.Persons != null ? project.Persons.Select(p => p.Id).ToList() : null,
+                    ProjectItems = project.ProjectItems != null ? project.ProjectItems.Select(p => p.Id).ToList() : null
+                };
+                projectDtos.Add(projectDto);
+            }
+            return projectDtos;
         }
 
         public bool ProjectExists(int id)
@@ -29,14 +54,30 @@ namespace ProjectTracker.Repository
             return _context.Project.Any(p => p.Id == id);
         }
 
-        public bool CreateProject(Project project)
+        public bool CreateProject(ProjectDto newProject)
         {
+            var project = new Project()
+            {
+                Id = newProject.Id,
+                Name = newProject.Name,
+                Description = newProject.Description,
+                Persons = newProject.Persons != null ? _context.Person.Where(p => newProject.Persons.Contains(p.Id)).ToList() : null,
+                ProjectItems = newProject.ProjectItems != null ? _context.ProjectItem.Where(p => newProject.ProjectItems.Contains(p.Id)).ToList() : null
+            };
             _context.Add(project);
             return Save();
         }
 
-        public bool UpdateProject(Project project)
+        public bool UpdateProject(ProjectDto projectInfo)
         {
+            var project = _context.Project.Include(p => p.ProjectItems).Include(p => p.Persons).
+                FirstOrDefault(p => p.Id == projectInfo.Id);
+            project.ProjectItems = projectInfo.ProjectItems != null ? _context.ProjectItem.Where(p => projectInfo.ProjectItems.Contains(p.Id)).ToList() : null;
+            project.Persons = projectInfo.Persons != null ? _context.Person.Where(p => projectInfo.Persons.Contains(p.Id)).ToList() : null;
+            /*var person = _context.Person.Include(pe => pe.ProjectItems).Include(pe => pe.Projects).
+                FirstOrDefault(pe => pe.Id == personInfo.Id);
+            person.ProjectItems = personInfo.ProjectItems != null ? _context.ProjectItem.Where(pi => personInfo.ProjectItems.Contains(pi.Id)).ToList() : null;
+            person.Projects = personInfo.Projects != null ? _context.Project.Where(pi => personInfo.Projects.Contains(pi.Id)).ToList() : null;*/
             _context.Update(project);
             return Save();
         }

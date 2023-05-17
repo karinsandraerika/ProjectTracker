@@ -93,19 +93,18 @@ namespace ProjectTracker.Repository
         {
             var person = _context.Person.Include(pe => pe.ProjectItems).Include(pe => pe.Projects).
                 FirstOrDefault(pe => pe.Id == personInfo.Id);
-            if (person == null)
-            {
-                return false;
-            }
+            person.Name = personInfo.Name ?? person.Name;
+            person.Username = personInfo.Username ?? person.Name;
+            person.PhoneNumber = personInfo.PhoneNumber ?? person.PhoneNumber;
+            person.Email = personInfo.Email ?? person.Email;
+           
             if (personInfo.ProjectItems != null)
             {
-                var projectItems = _context.ProjectItem.Where(pi => personInfo.ProjectItems.Contains(pi.Id)).ToList();
-                person.ProjectItems = projectItems;
+                person.ProjectItems = _context.ProjectItem.Where(pi => personInfo.ProjectItems.Contains(pi.Id)).ToList();
             }
             if (personInfo.Projects != null)
             {
-                var projects = _context.Project.Where(pi => personInfo.Projects.Contains(pi.Id)).ToList();
-                person.Projects = projects;
+                person.Projects = _context.Project.Where(pi => personInfo.Projects.Contains(pi.Id)).ToList();
             }
 
             _context.Update(person);
