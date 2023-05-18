@@ -96,8 +96,9 @@ namespace ProjectTracker.Pages
 
                 _context.ProjectItem.Add(projectItem);
                 _context.SaveChanges();
+                return RedirectToPage("./ProjectDetails", new { id = projectId });
             }
-            return RedirectToPage("./ProjectDetails", new { id = projectId });
+            return Page();
         }
     }
 }
