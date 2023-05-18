@@ -16,12 +16,6 @@ namespace ProjectTracker.Repository
 		{
             _context = context;
         }
-        /*
-        public Person GetPerson(int id)
-        {
-            return _context.Person.Where(pe => pe.Id == id).FirstOrDefault();
-        }
-        */
 
         public PersonDto GetPerson(int id)
         {
@@ -39,6 +33,7 @@ namespace ProjectTracker.Repository
             return personDto;
         }
 
+        
         public ICollection<PersonDto> GetPersons()
         {
             var persons = _context.Person.Include(pe => pe.ProjectItems).Include(pe => pe.Projects).ToList();
@@ -59,7 +54,7 @@ namespace ProjectTracker.Repository
             }
             return personDtos;
         }
-
+        
         /*
         public Person GetPerson(string username)
         {

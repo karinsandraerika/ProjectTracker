@@ -1,14 +1,14 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Threading.Tasks;
+//using ProjectTracker.Models;
+//using ProjectTracker.Repository;
+//using ProjectTracker.Data;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using ProjectTracker.Data;
 using ProjectTracker.Interfaces;
-using ProjectTracker.Models;
-using ProjectTracker.Repository;
 using ProjectTracker.Dto;
 
 
@@ -33,7 +33,7 @@ namespace ProjectTracker.Controllers
             var persons = _personRepository.GetPersons();
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
             return Ok(persons);
@@ -47,7 +47,6 @@ namespace ProjectTracker.Controllers
                 return NotFound();
             }
 
-            //var person = _mapper.Map<PersonDto>(_personRepository.GetPerson(id));
             var person = _personRepository.GetPerson(id);
 
             if (!ModelState.IsValid)
@@ -63,7 +62,7 @@ namespace ProjectTracker.Controllers
         {
             if (newPerson == null)
             {
-                return BadRequest(ModelState);
+                return BadRequest();
             }
 
             var person = _personRepository.GetPersons().Where(pe => pe.Username == newPerson.Username).FirstOrDefault();
@@ -78,8 +77,6 @@ namespace ProjectTracker.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            //var personMap = _mapper.Map<Person>(newPerson);
 
             if (!_personRepository.CreatePerson(newPerson))
             {

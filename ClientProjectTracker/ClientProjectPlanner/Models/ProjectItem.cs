@@ -11,7 +11,7 @@ namespace ClientProjectPlanner
         public string? Description { get; set; }
         //public Importance? Importance { get; set; } = null;
         //public CompletionStatus? Completed { get; set; }
-        public string? Importance { get; set; } = null;
+        public string? Importance { get; set; }
         public string? Completed { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
