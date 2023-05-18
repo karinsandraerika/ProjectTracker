@@ -3,8 +3,11 @@
 @{
 }
 
-<h1>@Model.project.Name</h1>
+@{
+    ViewData["Title"] = "Project Details";
+}
 
+<h1>@Model.project.Name</h1>
 
 
 <dl class="row">
@@ -24,24 +27,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.ProjectItems[0].Description)
             </th>
-            @*<th>
-                    @Html.DisplayNameFor(model => model.ProjectItems[0].Importance)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ProjectItems[0].Completed)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ProjectItems[0].StartDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ProjectItems[0].EndDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ProjectItems[0].TimeToComplete)
-                </th>*@
-                <th>
-                    @Html.DisplayNameFor(model => model.ProjectItems[0].Persons)
-                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProjectItems[0].Persons)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -50,40 +38,22 @@
         {
             <tr>
                 <td>
-                    @*@Html.DisplayFor(modelItem => item.Name)*@
                     <a href="/ProjectItemDetails?id=@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.Importance)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Completed)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.StartDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EndDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TimeToComplete)
-                    </td>*@
-            <td>
-                @foreach (var person in item.Persons)
-                {
-                    @Html.DisplayFor(modelItem => person.Name)
-                    if (person != item.Persons.Last())
-                    {
-                        @Html.Raw(", ")
-                    }
-                }
-            </td>
                 <td>
-                    @*<a asp-page="./Index" asp-route-id="@item.Id">Project</a> |
-                        <a asp-page="./Persons" asp-route-id="@item.Id">Persons</a> |*@
+                    @foreach (var person in item.Persons)
+                    {
+                        @Html.DisplayFor(modelItem => person.Name)
+                        if (person != item.Persons.Last())
+                        {
+                            @Html.Raw(", ")
+                        }
+                    }
+                </td>
+                <td>
                     <form method="post">
                         <input type="hidden" asp-for="ProjectId" />
                         <button class="btn btn-danger" asp-page-handler="Delete" asp-route-id="@item.Id" type="submit">Delete</button>
@@ -94,5 +64,5 @@
     </tbody>
 </table>
 
-    <a class="btn btn-success" role="button" asp-page="./CreateProjectItem" asp-route-id="@Model.ProjectId">Add Item</a>
+<a class="btn btn-success" role="button" asp-page="./CreateProjectItem" asp-route-id="@Model.ProjectId">Add Item</a>
 

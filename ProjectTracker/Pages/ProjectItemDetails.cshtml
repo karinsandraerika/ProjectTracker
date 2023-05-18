@@ -4,73 +4,123 @@
 }
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Project Item Details";
 }
 
-<h1>Details</h1>
+<h1>Project Item Details</h1>
 
-<div>
-    <h4>ProjectItem</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ProjectItem.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ProjectItem.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ProjectItem.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ProjectItem.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ProjectItem.Importance)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ProjectItem.Importance)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ProjectItem.Completed)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ProjectItem.Completed)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ProjectItem.StartDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ProjectItem.StartDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ProjectItem.EndDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ProjectItem.EndDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ProjectItem.HoursToComplete)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ProjectItem.HoursToComplete)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ProjectItem.Persons)
-        </dt>
-        <dd class="col-sm-10">
-            @foreach (var person in @Model.ProjectItem.Persons)
-            {
-                @Html.DisplayFor(modelItem => person.Name)
-                if (person != @Model.ProjectItem.Persons.Last())
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ProjectItem.Id" />
+            <div class="form-group">
+                <label asp-for="ProjectItem.Name" class="control-label"></label>
+                <input asp-for="ProjectItem.Name" class="form-control" />
+                <span asp-validation-for="ProjectItem.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProjectItem.Description" class="control-label"></label>
+                <input asp-for="ProjectItem.Description" class="form-control" />
+                <span asp-validation-for="ProjectItem.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SelectedImportance" class="form-label">Importance</label>
+                <select name="SelectedImportance" asp-for="@Model.ProjectItem.Importance" asp-items="@Model.ImportanceOptions" class="form-control">
+                    <option value="">-- Select Importance --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="SelectedCompletionStatus" class="form-label">Completed</label>
+                <select name="SelectedCompletionStatus" asp-for="@Model.ProjectItem.Completed" asp-items="Model.CompletionOptions" class="form-control">
+                    <option value="">-- Select Completion Status --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProjectItem.StartDate" class="control-label"></label>
+                <input asp-for="ProjectItem.StartDate" class="form-control" />
+                <span asp-validation-for="ProjectItem.StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProjectItem.EndDate" class="control-label"></label>
+                <input asp-for="ProjectItem.EndDate" class="form-control" />
+                <span asp-validation-for="ProjectItem.EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProjectItem.HoursToComplete" class="control-label"></label>
+                <input asp-for="ProjectItem.HoursToComplete" class="form-control" />
+                <span asp-validation-for="ProjectItem.HoursToComplete" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="projectId" />
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a class="btn btn-warning" role="button" asp-page="./ProjectDetails" asp-route-id="@Model.ProjectItem.Project?.Id">Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@*<div>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ProjectItem.Name)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ProjectItem.Name)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ProjectItem.Description)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ProjectItem.Description)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ProjectItem.Importance)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ProjectItem.Importance)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ProjectItem.Completed)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ProjectItem.Completed)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ProjectItem.StartDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ProjectItem.StartDate)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ProjectItem.EndDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ProjectItem.EndDate)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ProjectItem.HoursToComplete)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ProjectItem.HoursToComplete)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ProjectItem.Persons)
+            </dt>
+            <dd class="col-sm-10">
+                @foreach (var person in @Model.ProjectItem.Persons)
                 {
-                    @Html.Raw(", ")
+                    @Html.DisplayFor(modelItem => person.Name)
+                    if (person != @Model.ProjectItem.Persons.Last())
+                    {
+                        @Html.Raw(", ")
+                    }
                 }
-            }
-        </dd>
-    </dl>
-</div>
-<div>
-    <a class="btn btn-warning" role="button" asp-page="./ProjectDetails" asp-route-id="@Model.ProjectItem.Project?.Id">Back</a>
-</div>
+            </dd>
+        </dl>
+    </div>*@
+
 

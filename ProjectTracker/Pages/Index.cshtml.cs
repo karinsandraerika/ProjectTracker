@@ -27,20 +27,6 @@ public class IndexModel : PageModel
         Projects = _context.Project.ToList();
     }
 
-    //[BindProperty]
-    //public Project Project { get; set; } = default!;
-
-
-    //public ActionResult OnPost()
-    //{
-    //    if (ModelState.IsValid)
-    //    {
-    //        _context.Project.Add(Project);
-    //        _context.SaveChanges();
-    //        return RedirectToPage("/Index");
-    //    }
-    //    return Page();
-    //}
 
     public ActionResult OnPostDelete(int id)
     {
@@ -50,12 +36,57 @@ public class IndexModel : PageModel
         return RedirectToPage("/Index");
     }
 
-    //public ActionResult OnPostAddProject()
-    //{
-    //    return RedirectToPage("/CreateProject");
-    //}
+    public Dictionary<string, double> ProjectProgress(int id)
+    {
+        var project = _context.Project.Include(proj => proj.ProjectItems).SingleOrDefault(p => p.Id == id);
+
+        Dictionary<string, double> progress = new Dictionary<string, double>
+        {
+            { "Not Started", 0 },
+            { "In Progress", 0},
+            { "Completed", 0 }
+        };
+
+        if (project.ProjectItems == null)
+        {
+            return progress;
+        }
+
+        int totalHours = 0;
+        int notStarted = 0;
+        int inProgress = 0;
+        int completed = 0;
+
+        foreach (var item in project.ProjectItems)
+        {
+            totalHours += item.HoursToComplete ?? 0; // Use null-coalescing operator to handle nullable integers
+            switch (item.Completed)
+            {
+                case Enums.CompletionStatus.NotStarted:
+                    notStarted += item.HoursToComplete ?? 0;
+                    break;
+                case Enums.CompletionStatus.InProgress:
+                    inProgress += item.HoursToComplete ?? 0;
+                    break;
+                case Enums.CompletionStatus.Completed:
+                    completed += item.HoursToComplete ?? 0;
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (totalHours == 0)
+        {
+            return progress;
+        }
+
+        progress["Not Started"] = (double)notStarted / totalHours * 100;
+        progress["In Progress"] = (double)inProgress / totalHours * 100;
+        progress["Completed"] = (double)completed / totalHours * 100;
 
 
+        return progress;
+    }
 }
 
      
