@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Runtime.ConstrainedExecution;
 using System.Text;
 using static System.Reflection.Metadata.BlobBuilder;
@@ -31,10 +32,10 @@ namespace ClientProjectPlanner
             Dictionary<string, Action> menuOptions = new Dictionary<string, Action>()
             {
                 {"1", PrintAllProjects},
-                {"2", PrintAllProjects},
-                {"3", PrintAllProjects},
+                {"2", PrintOneProject},
+                {"3", CreateProject},
                 {"4", PrintAllProjects},
-                {"5", PrintAllProjects},
+                {"5", DeleteProject},
                 {"6",  () => { Continue = false;} }
             };
             string choice = Console.ReadLine().Trim();
@@ -53,7 +54,51 @@ namespace ClientProjectPlanner
             
         }
 
+        private void PrintOneProject()
+        {
+            Console.WriteLine("Id of the project you want: ");
+            //TODO check if null, check if number.
+            int id = int.Parse(Console.ReadLine());
+            Project project = clientProject.GetProject(id);
+            project.PrintProject();
+        }
 
+        private void CreateProject()
+        {
+            //TODO add while loope for name. Maybe optional to other props.
+            Console.WriteLine("Name of project: ");
+            string name = Console.ReadLine();
+            Console.WriteLine("Description of project: ");
+            string description = Console.ReadLine();
+            Project project = new Project() { Name = name, Description = description };
+            if (clientProject.PostProject(project))
+            {
+                Console.WriteLine("Successfully added");
+            }
+            else
+            {
+                Console.WriteLine("Failed to add");
+            }
+        }
+
+        private void UpdateProject()
+        {
+
+        }
+
+        private void DeleteProject()
+        {
+            Console.WriteLine("Id to delete: ");
+            int id = int.Parse(Console.ReadLine());
+            if (clientProject.DeleteProject(id))
+            {
+                Console.WriteLine("Succesfully deleted");
+            }
+            else
+            {
+                Console.WriteLine("Could not delete");
+            }
+        }
     }
 }
 

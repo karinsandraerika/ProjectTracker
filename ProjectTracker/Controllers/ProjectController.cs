@@ -134,9 +134,9 @@ namespace ProjectTracker.Controllers
                 return NotFound();
             }
 
-            //var projectDelete = _projectRepository.GetProject(id);
+            var projectDelete = _projectRepository.GetProject(id);
             //var personDelete = _mapper.Map<Person>(_personRepository.GetPerson(id));
-            var projectDelete = _mapper.Map<Project>(_projectRepository.GetProject(id));
+            
 
             if (!ModelState.IsValid)
             {

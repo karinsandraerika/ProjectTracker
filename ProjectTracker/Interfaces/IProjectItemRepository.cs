@@ -11,7 +11,7 @@ namespace ProjectTracker.Interfaces
         bool ProjectItemExists(int id);
         bool CreateProjectItem(ProjectItemDto projectItem);
         bool UpdateProjectItem(ProjectItemDto projectItem);
-        bool DeleteProjectItem(ProjectItem projectItem);
+        bool DeleteProjectItem(ProjectItemDto projectItem);
         bool Save();
 
     }

@@ -12,7 +12,7 @@ namespace ProjectTracker.Interfaces
         bool PersonExists(int id);
         bool CreatePerson(PersonDto person);
         bool UpdatePerson(PersonDto person);
-        bool DeletePerson(Person person);
+        bool DeletePerson(PersonDto person);
         bool Save();
     }
 }

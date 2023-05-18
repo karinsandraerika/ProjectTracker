@@ -111,8 +111,9 @@ namespace ProjectTracker.Repository
             return Save();
         }
 
-        public bool DeletePerson(Person person)
+        public bool DeletePerson(PersonDto personDto)
         {
+            var person = _context.Person.FirstOrDefault(p => p.Id == personDto.Id);
             _context.Remove(person);
             return Save();
         }

@@ -124,8 +124,8 @@ namespace ProjectTracker.Controllers
             {
                 return NotFound();
             }
-            var projectItemDelete = _mapper.Map<ProjectItem>(_projectItemRepository.GetProjectItem(id));
-            //var projectItemDelete = _projectItemRepository.GetProjectItem(id);
+            //var projectItemDelete = _mapper.Map<ProjectItem>(_projectItemRepository.GetProjectItem(id));
+            var projectItemDelete = _projectItemRepository.GetProjectItem(id);
 
             if (!ModelState.IsValid)
             {

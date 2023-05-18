@@ -115,9 +115,10 @@ namespace ProjectTracker.Repository
             return Save();
         }
 
-        public bool DeleteProjectItem(ProjectItem projectItem)
+        public bool DeleteProjectItem(ProjectItemDto projectItemDto)
         {
-            _context.Remove(projectItem);
+            var item = _context.ProjectItem.FirstOrDefault(p => p.Id == projectItemDto.Id);
+            _context.Remove(item);
             return Save();
         }
 
