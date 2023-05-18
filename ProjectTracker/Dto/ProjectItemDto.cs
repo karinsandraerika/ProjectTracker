@@ -19,7 +19,7 @@ namespace ProjectTracker.Dto
         public DateTime EndDate { get; set; }
         public List<int>? Persons { get; set; }
         public int? ProjectId { get; set; }
-        //public TimeSpan TimeToComplete { get; set; }
+        public int HoursToComplete { get; set; }
     }
 }
 

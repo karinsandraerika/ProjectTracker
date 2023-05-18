@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectTracker.Data;
 
@@ -10,9 +11,11 @@ using ProjectTracker.Data;
 namespace ProjectTracker.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230517130542_HoursToComplete")]
+    partial class HoursToComplete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,9 +110,6 @@ namespace ProjectTracker.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("HoursToComplete")
-                        .HasColumnType("int");
-
                     b.Property<string>("Importance")
                         .HasColumnType("longtext");
 
@@ -122,6 +122,9 @@ namespace ProjectTracker.Migrations
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<TimeSpan>("TimeToComplete")
+                        .HasColumnType("time(6)");
 
                     b.HasKey("Id");
 
