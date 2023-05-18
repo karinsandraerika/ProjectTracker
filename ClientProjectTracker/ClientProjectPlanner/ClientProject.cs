@@ -66,9 +66,22 @@ namespace ClientProjectPlanner
             }
             return false;
         }
-
+        
         public bool UpdateProject(Project project)
         {
+            string id = project.Id.ToString();
+            Uri uri = new(url + id);
+            string json = JsonConvert.SerializeObject(project);
+            StringContent stringContent = new StringContent(json, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = httpClient.PutAsync(uri, stringContent).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            return false;
+            /*
             Uri uri = new Uri(url + project.Id);
 
             string json = JsonConvert.SerializeObject(args);
@@ -85,6 +98,7 @@ namespace ClientProjectPlanner
             }
             Console.WriteLine("Error. Status Code " + (int)response.StatusCode + ": " + response.StatusCode);
             return false;
+            */
         }
 
         public bool DeleteProject(int id)

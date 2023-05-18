@@ -34,11 +34,12 @@ namespace ClientProjectPlanner
                 {"1", PrintAllProjects},
                 {"2", PrintOneProject},
                 {"3", CreateProject},
-                {"4", PrintAllProjects},
+                {"4", UpdateProject},
                 {"5", DeleteProject},
                 {"6",  () => { Continue = false;} }
             };
             string choice = Console.ReadLine().Trim();
+            Console.WriteLine();
             if (menuOptions.TryGetValue(choice, out Action action))
                 action();
             else
@@ -50,8 +51,6 @@ namespace ClientProjectPlanner
         {
             List<Project> projects = clientProject.GetProjects();
             projects.ForEach(p => p.PrintProject());
-            //Console.WriteLine();
-            
         }
 
         private void PrintOneProject()
@@ -83,6 +82,30 @@ namespace ClientProjectPlanner
 
         private void UpdateProject()
         {
+            Console.WriteLine("Please write the id of the project you want to update: ");
+            string id = Console.ReadLine();
+            Project project = id != null ? clientProject.GetProject(int.Parse(id)) : null;
+            if (project == null)
+            {
+                Console.WriteLine("No project with that id exists");
+                return;
+            }
+            Console.WriteLine($"Name of project is {project.Name}. Please write a new name if you wish to change it. Otherwise leave blank");
+            string name = Console.ReadLine();
+            project.Name = string.IsNullOrEmpty(name) ? project.Name : name;
+
+            Console.WriteLine($"Description of project is {project.Description}. Please write a new description if you wish to change it. Otherwise leave blank");
+            string description = Console.ReadLine();
+            project.Description = string.IsNullOrEmpty(description) ? project.Name : description;
+
+            if (clientProject.UpdateProject(project))
+            {
+                Console.WriteLine("Succesfully updated");
+            }
+            else
+            {
+                Console.WriteLine("Could not update");
+            }
 
         }
 

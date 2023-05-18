@@ -16,12 +16,12 @@ namespace ProjectTracker.Models
         public CompletionStatus? Completed { get; set; }
         [DataType(DataType.Date)]
         [Display(Name = "Start Date")]
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
         [DataType(DataType.Date)]
         [Display(Name = "End Date")]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
         [Display(Name = "Hours to complete")]
-        public int HoursToComplete { get; set; }
+        public int? HoursToComplete { get; set; }
         public Project? Project { get; set; }
     }
 }
