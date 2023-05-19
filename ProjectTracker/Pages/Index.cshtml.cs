@@ -30,11 +30,40 @@ public class IndexModel : PageModel
 
     public ActionResult OnPostDelete(int id)
     {
-        Project projectToDelete = _context.Project.SingleOrDefault(p => p.Id == id);
-        _context.Project.Remove(projectToDelete);
-        _context.SaveChanges();
-        return RedirectToPage("/Index");
+
+        Project projectToDelete = _context.Project.Include(proj => proj.ProjectItems).SingleOrDefault(p => p.Id == id);
+
+        if (projectToDelete == null)
+        {
+            // Object not found
+            return NotFound();
+        }
+
+        if (projectToDelete.ProjectItems == null)
+        {
+            _context.Project.Remove(projectToDelete);
+            _context.SaveChanges();
+            return RedirectToPage("/Index");
+        }
+        else
+        {
+            // Object cannot be deleted
+            return BadRequest("The project contains tasks and can't be deleted.");
+        }
     }
+
+
+    public Dictionary<int, Dictionary<string, double>> ProjectsProgress()
+    {
+        Dictionary<int, Dictionary<string, double>> projectProgress = new Dictionary<int, Dictionary<string, double>>();
+        foreach (var item in Projects)
+        {
+            projectProgress[item.Id] = ProjectProgress(item.Id);
+        }
+        return projectProgress;
+    }
+
+
 
     public Dictionary<string, double> ProjectProgress(int id)
     {

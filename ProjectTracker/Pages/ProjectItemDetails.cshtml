@@ -4,15 +4,15 @@
 }
 
 @{
-    ViewData["Title"] = "Project Item Details";
+    ViewData["Title"] = "Edit Task";
 }
 
-<h1>Project Item Details</h1>
+<h1>Edit Task</h1>
 
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post">
+        <form method="post"> 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ProjectItem.Id" />
             <div class="form-group">
@@ -52,7 +52,7 @@
                 <input asp-for="ProjectItem.HoursToComplete" class="form-control" />
                 <span asp-validation-for="ProjectItem.HoursToComplete" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-top: 15px;">
                 <input type="hidden" asp-for="projectId" />
                 <input type="submit" value="Save" class="btn btn-primary" />
                 <a class="btn btn-warning" role="button" asp-page="./ProjectDetails" asp-route-id="@Model.ProjectItem.Project?.Id">Back</a>

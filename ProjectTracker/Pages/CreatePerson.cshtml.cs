@@ -18,7 +18,6 @@ namespace ProjectTracker.Pages
             _context = context;
         }
 
-
         [BindProperty]
         public Person person { get; set; }
 
@@ -26,7 +25,6 @@ namespace ProjectTracker.Pages
         {
 
         }
-
 
         public ActionResult OnPost()
         {

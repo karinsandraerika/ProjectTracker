@@ -49,60 +49,20 @@
 <a class="btn btn-success" role="button" asp-page="./CreateProject">Add New Project</a>
 
 
-@{
-    // Retrieve the progress values for each project
-    Dictionary<int, Dictionary<string, double>> projectProgress = new Dictionary<int, Dictionary<string, double>>();
-    foreach (var item in Model.Projects)
-    {
-        projectProgress[item.Id] = Model.ProjectProgress(item.Id);
-    }
+
+<div id="chart-data" data-project-progress='@Html.Raw(Json.Serialize(Model.ProjectsProgress()))'></div>
+
+
+@section Scripts {
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="~/js/charts.js" asp-append-version="true"></script>
+    <script>// Retrieve the project progress data from the "chart-data" element
+        var projectProgressData = document.getElementById('chart-data').dataset.projectProgress;
+        projectProgressData = JSON.parse(projectProgressData);
+
+        // Call the function to create project charts
+        createProjectCharts(projectProgressData);</script>
 }
-
-<style>
-    .chart-container {
-        width: 150px; 
-        height: 150px; 
-    }
-</style>
-
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-
-
-<script>
-    var projectProgressData = @Html.Raw(Json.Serialize(projectProgress));
-
-    var chartContainers = document.querySelectorAll('.chart-container');
-    chartContainers.forEach(function(chartContainer) {
-        var projectId = chartContainer.dataset.projectId;
-        var progressData = projectProgressData[projectId];
-        var values = Object.values(progressData);
-        var labels = Object.keys(progressData);
-
-        var chartData = [{
-            values: values,
-            labels: labels,
-            type: 'pie',
-            textinfo: 'label+percent',
-            textposition: 'inside',
-            hoverinfo: 'label+percent',
-            texttemplate: "%{label}",
-            marker: {
-                colors: [
-                    'rgb(255, 0, 0)',     // Not Started: Red
-                    'rgb(255, 255, 0)',   // In Progress: Yellow
-                    'rgb(0, 128, 0)'      // Completed: Green
-                ]
-            }
-        }];
-
-        var layout = {
-            margin: { l: 3, r: 3, t: 3, b: 3 },
-            showlegend: false
-        };
-
-        Plotly.newPlot(chartContainer, chartData, layout);
-    });
-</script>
 
 
 

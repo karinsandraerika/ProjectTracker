@@ -3,10 +3,10 @@
 @{
 }
 @{
-    ViewData["Title"] = "Create Project Item";
+    ViewData["Title"] = "Create Task";
 }
 
-<h1>New Project Item</h1>
+<h1>New Task</h1>
 
 <form method="post" class="form">
     <div class="form-group">
@@ -51,7 +51,7 @@
         <select name="selectedPersons" asp-for="@Model.projectItem.Persons" asp-items="@Model.PersonListItems" class="form-control" multiple></select>
     </div>
     <input type="hidden" asp-for="projectId" />
-    <button type="submit" class="btn btn-success">Create</button>
+    <button type="submit" class="btn btn-success" style="margin-top: 15px;">Create</button>
 </form>
 
 

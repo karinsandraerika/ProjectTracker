@@ -134,36 +134,6 @@ namespace ProjectTracker.Pages
             return (_context.ProjectItem?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
-
-
-    //private readonly ProjectTracker.Data.DatabaseContext _context;
-
-    //public ProjectItemDetailsModel(ProjectTracker.Data.DatabaseContext context)
-    //{
-    //    _context = context;
-    //}
-
-    //[BindProperty]
-    //public ProjectItem ProjectItem { get; set; } = default!;
-
-    //public async Task<IActionResult> OnGetAsync(int? id)
-    //{
-    //    if (id == null || _context.ProjectItem == null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    var projectitem = await _context.ProjectItem.Include(pItems => pItems.Project)
-    //        .Include(pItems => pItems.Persons).FirstOrDefaultAsync(m => m.Id == id);
-    //    if (projectitem == null)
-    //    {
-    //        return NotFound();
-    //    }
-    //    ProjectItem = projectitem;
-    //    return Page();
-    //}
-
-
 }
 
 

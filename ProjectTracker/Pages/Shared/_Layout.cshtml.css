@@ -28,9 +28,9 @@ a {
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
 }
 
 .border-top {
@@ -63,6 +63,7 @@ body {
     overflow-x: hidden;
 }
 
+
 #wrapper {
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
@@ -73,12 +74,13 @@ body {
 #sidebar-wrapper {
     z-index: 1000;
     position: fixed;
-    top: 70px; 
+    top: 60px;
     left: 0;
     width: 250px;
-    bottom: 70px;
+    bottom: 65px;
+    overflow-x: hidden;
     overflow-y: auto;
-    background: #fff;
+    background: #f8f9fa;
     color: #999999;
     border-right: 1px solid #e5e5e5;
     box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
