@@ -74,16 +74,11 @@ namespace ProjectTracker.Repository
             var project = _context.Project.Include(p => p.ProjectItems).Include(p => p.Persons).
                 FirstOrDefault(p => p.Id == projectInfo.Id);
             //Check that the name does not exist for another project
-            project.Name = projectInfo.Name ?? project.Name;
-            project.Description = projectInfo.Description ?? project.Description;
-            if (projectInfo.Persons != null)
-            {
-                project.Persons = _context.Person.Where(p => projectInfo.Persons.Contains(p.Id)).ToList();
-            }
-            if (projectInfo.ProjectItems != null)
-            {
-                project.ProjectItems = _context.ProjectItem.Where(p => projectInfo.ProjectItems.Contains(p.Id)).ToList();
-            }
+            project.Name = projectInfo.Name;
+            project.Description = projectInfo.Description;
+            project.Persons = projectInfo.Persons != null ? _context.Person.Where(p => projectInfo.Persons.Contains(p.Id)).ToList() : null;
+            project.ProjectItems = projectInfo.ProjectItems != null ? _context.ProjectItem.Where(p => projectInfo.ProjectItems.Contains(p.Id)).ToList() : null;
+            
             _context.Update(project);
             return Save();
         }

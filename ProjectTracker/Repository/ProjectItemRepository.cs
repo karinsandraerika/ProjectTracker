@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol.Core.Types;
 using ProjectTracker.Data;
 using ProjectTracker.Dto;
+using ProjectTracker.Enums;
 using ProjectTracker.Interfaces;
 using ProjectTracker.Models;
 
@@ -53,7 +54,7 @@ namespace ProjectTracker.Repository
                     StartDate = item.StartDate,
                     EndDate = item.EndDate,
                     HoursToComplete = item.HoursToComplete,
-                    Persons = item.Persons != null ? item.Persons.Select(p => p.Id).ToList() : null
+                    Persons = item.Persons != null && !item.Persons.Any() ? item.Persons.Select(p => p.Id).ToList() : null
                 };
                 
                 if (item.Project != null)
@@ -77,10 +78,9 @@ namespace ProjectTracker.Repository
             {
                 Id = newItem.Id,
                 Name = newItem.Name,
-                //TODO Check enums. Maybe add validation here.
                 Description = newItem.Description,
-                Importance = newItem.Importance,
-                Completed = newItem.Completed,
+                Importance = newItem.Importance != null && Enum.IsDefined(typeof(Importance), newItem.Importance) ? newItem.Importance : null,
+                Completed = newItem.Completed != null && Enum.IsDefined(typeof(CompletionStatus), newItem.Completed) ? newItem.Completed : null,
                 StartDate = newItem.StartDate,
                 EndDate = newItem.EndDate,
                 HoursToComplete = newItem.HoursToComplete,
@@ -96,16 +96,19 @@ namespace ProjectTracker.Repository
         {
             var item = _context.ProjectItem.Include(p => p.Persons).
                 FirstOrDefault(p => p.Id == projectItemInfo.Id);
-            if (item == null)
-            {
-                return false;
-            }
-            if (projectItemInfo.Persons != null)
-            {
-                var persons = _context.Person.Where(p => projectItemInfo.Persons.Contains(p.Id)).ToList();
-                item.Persons = persons;
-            }
+            item.Name = projectItemInfo.Name;
+            item.Description = projectItemInfo.Description;
+            item.StartDate = projectItemInfo.StartDate;
+            item.EndDate = projectItemInfo.EndDate;
+            item.HoursToComplete = projectItemInfo.HoursToComplete;
+            item.Persons = projectItemInfo.Persons != null ? _context.Person.Where(p => projectItemInfo.Persons.Contains(p.Id)).ToList() : null;
+            //item.Project = projectItemInfo.ProjectId != null ? _context.Project.FirstOrDefault(p => p.Id == projectItemInfo.ProjectId) : null;
+            //item.Project = projectItemInfo.ProjectId != null ? _context.Project.FirstOrDefault(p => p.Id == projectItemInfo.ProjectId) : null;
+              item.Project = projectItemInfo.ProjectId != null ? _context.Project.FirstOrDefault(p => p.Id == projectItemInfo.ProjectId) : null;
 
+            item.Importance = projectItemInfo.Importance != null && Enum.IsDefined(typeof(Importance), projectItemInfo.Importance) ? projectItemInfo.Importance : null;
+            item.Completed = projectItemInfo.Completed != null && Enum.IsDefined(typeof(CompletionStatus), projectItemInfo.Completed) ? projectItemInfo.Completed : null;
+            
             _context.Update(item);
             return Save();
         }

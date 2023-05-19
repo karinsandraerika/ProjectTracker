@@ -11,7 +11,6 @@ namespace ClientProjectPlanner
 
         public void PrintProject()
         {
-            //What happens when Lists are empty or null? Should I add default empty list?
             Console.WriteLine($"Id: {Id} Name: {Name} Description: {Description} Persons: " +
                 $"{string.Join(", ", Persons)} Project items: {string.Join(", ", ProjectItems)}");
                 
