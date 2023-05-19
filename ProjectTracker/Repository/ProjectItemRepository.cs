@@ -30,6 +30,7 @@ namespace ProjectTracker.Repository
                 Completed = item.Completed,
                 StartDate = item.StartDate,
                 EndDate = item.EndDate,
+                HoursToComplete = item.HoursToComplete,
                 Persons = item.Persons != null ? item.Persons.Select(p => p.Id).ToList() : null,
                 ProjectId = item.Project != null ? item.Project.Id : null
             };
@@ -51,6 +52,7 @@ namespace ProjectTracker.Repository
                     Completed = item.Completed,
                     StartDate = item.StartDate,
                     EndDate = item.EndDate,
+                    HoursToComplete = item.HoursToComplete,
                     Persons = item.Persons != null ? item.Persons.Select(p => p.Id).ToList() : null
                 };
                 
@@ -80,19 +82,12 @@ namespace ProjectTracker.Repository
                 Importance = newItem.Importance,
                 Completed = newItem.Completed,
                 StartDate = newItem.StartDate,
-                EndDate = newItem.EndDate
+                EndDate = newItem.EndDate,
+                HoursToComplete = newItem.HoursToComplete,
+                Persons = newItem.Persons != null ? _context.Person.Where(p => newItem.Persons.Contains(p.Id)).ToList() : null,
+                Project = newItem.ProjectId != null ? _context.Project.FirstOrDefault(p => p.Id == newItem.ProjectId) : null
             };
-
-            if (newItem.Persons != null)
-            {
-                var persons = _context.Person.Where(p => newItem.Persons.Contains(p.Id)).ToList();
-                item.Persons = persons;
-            }
-            var project = _context.Project.FirstOrDefault(p => p.Id == newItem.ProjectId);
-            if (project != null)
-            {
-                item.Project = project;
-            }
+            
             _context.Add(item);
             return Save();
         }

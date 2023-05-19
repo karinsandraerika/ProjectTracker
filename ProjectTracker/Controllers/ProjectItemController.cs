@@ -14,25 +14,22 @@ namespace ProjectTracker.Controllers
     [ApiController]
     public class ProjectItemController : ControllerBase
 	{
-        private readonly IProjectItemRepository _projectItemRepository;
-        private readonly IProjectRepository _projectRepository;  
+        private readonly IProjectItemRepository _projectItemRepository; 
         private readonly IMapper _mapper;
 
-        public ProjectItemController(IProjectItemRepository projectItemRepository, IProjectRepository projectRepository, IMapper mapper)
+        public ProjectItemController(IProjectItemRepository projectItemRepository, IMapper mapper)
         {
             _projectItemRepository = projectItemRepository;
-            _projectRepository = projectRepository;
             _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult GetProjectItems()
         {
-            //var projectItems = _mapper.Map<List<ProjectItemDto>>(_projectItemRepository.GetProjectItems());
             var projectItems = _projectItemRepository.GetProjectItems();
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
             return Ok(projectItems);
@@ -46,7 +43,6 @@ namespace ProjectTracker.Controllers
                 return NotFound();
             }
 
-            //var projectItem = _mapper.Map<ProjectItemDto>(_projectItemRepository.GetProjectItem(id));
             var projectItem = _projectItemRepository.GetProjectItem(id);
 
             if (!ModelState.IsValid)
@@ -70,16 +66,13 @@ namespace ProjectTracker.Controllers
                 return BadRequest(ModelState);
             }
 
-            //var projectItemMap = _mapper.Map<ProjectItem>(newProjectItem);
-            //projectItemMap.Project = _projectRepository.GetProject(projectId);
-
             if (!_projectItemRepository.CreateProjectItem(newProjectItem))
             {
-                ModelState.AddModelError("", "Something went wrong hile saving");
+                ModelState.AddModelError("", "Something went wrong while saving");
                 return StatusCode(500, ModelState);
             }
 
-            return Ok("Sucessfully added");
+            return Ok(new { message = "Successfully added" });
         }
 
         [HttpPut("{projectItemId}")]
@@ -102,10 +95,8 @@ namespace ProjectTracker.Controllers
 
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
-
-            //var projectItemMap = _mapper.Map<ProjectItem>(projectItemInfo);
 
             if (!_projectItemRepository.UpdateProjectItem(projectItemInfo))
             {
@@ -113,8 +104,7 @@ namespace ProjectTracker.Controllers
                 return StatusCode(500, ModelState);
             }
 
-            //return NoContent();
-            return Ok("Succesfully updated");
+            return Ok(new { message = "Successfully updated" });
         }
 
         [HttpDelete("{id}")]
@@ -124,7 +114,7 @@ namespace ProjectTracker.Controllers
             {
                 return NotFound();
             }
-            //var projectItemDelete = _mapper.Map<ProjectItem>(_projectItemRepository.GetProjectItem(id));
+            
             var projectItemDelete = _projectItemRepository.GetProjectItem(id);
 
             if (!ModelState.IsValid)
@@ -138,7 +128,7 @@ namespace ProjectTracker.Controllers
                 return StatusCode(500, ModelState);
             }
 
-            return Ok("Succesfully deleted");
+            return Ok(new { message = "Successfully deleted" });
         }
 
     }

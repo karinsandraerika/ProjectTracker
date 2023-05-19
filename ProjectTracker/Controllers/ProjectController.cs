@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ProjectTracker.Data;
 using ProjectTracker.Dto;
 using ProjectTracker.Interfaces;
 using ProjectTracker.Models;
-using ProjectTracker.Repository;
+//using ProjectTracker.Repository;
 
 
 namespace ProjectTracker.Controllers
@@ -29,11 +29,10 @@ namespace ProjectTracker.Controllers
         [HttpGet]
         public IActionResult GetProjects()
         {
-            //var projects = _mapper.Map<List<ProjectDto>>(_projectRepository.GetProjects());
             var projects = _projectRepository.GetProjects();
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
             return Ok(projects);
@@ -47,7 +46,6 @@ namespace ProjectTracker.Controllers
                 return NotFound();
             }
 
-            //var project = _mapper.Map<ProjectDto>(_projectRepository.GetProject(id));
             var project = _projectRepository.GetProject(id);
 
             if (!ModelState.IsValid)
@@ -65,7 +63,6 @@ namespace ProjectTracker.Controllers
             {
                 return BadRequest(ModelState);
             }
-            //TODO project name
             var project = _projectRepository.GetProjects().Where(p => p.Name.Trim().ToUpper() == newProject.Name.Trim().ToUpper())
                 .FirstOrDefault();
 
@@ -80,15 +77,13 @@ namespace ProjectTracker.Controllers
                 return BadRequest(ModelState);
             }
 
-           // var projectMap = _mapper.Map<Project>(newProject);
-       
             if (!_projectRepository.CreateProject(newProject))
             {
-                ModelState.AddModelError("", "Something went wrong hile saving");
+                ModelState.AddModelError("", "Something went wrong while saving");
                 return StatusCode(500, ModelState);
             }
 
-            return Ok("Sucessfully added");
+            return Ok(new { message = "Successfully added" });
         }
 
         [HttpPut("{projectId}")]
@@ -109,12 +104,11 @@ namespace ProjectTracker.Controllers
                 return NotFound();
             }
 
+
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
-
-            //var projectMap = _mapper.Map<Project>(projectInfo);
 
             if (!_projectRepository.UpdateProject(projectInfo))
             {
@@ -122,8 +116,7 @@ namespace ProjectTracker.Controllers
                 return StatusCode(500, ModelState);
             }
 
-            //return NoContent();
-            return Ok("Succesfully updated");
+            return Ok(new { message = "Successfully updated" });
         }
 
         [HttpDelete("{id}")]
@@ -135,9 +128,7 @@ namespace ProjectTracker.Controllers
             }
 
             var projectDelete = _projectRepository.GetProject(id);
-            //var personDelete = _mapper.Map<Person>(_personRepository.GetPerson(id));
             
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -149,7 +140,7 @@ namespace ProjectTracker.Controllers
                 return StatusCode(500, ModelState);
             }
 
-            return Ok("Succesfully deleted");
+            return Ok(new { message = "Successfully deleted" });
         }
 
     }

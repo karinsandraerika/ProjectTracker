@@ -1,11 +1,12 @@
 ﻿
-//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Threading.Tasks;
-//using ProjectTracker.Models;
-//using ProjectTracker.Repository;
-//using ProjectTracker.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using ProjectTracker.Models;
+using ProjectTracker.Repository;
+using ProjectTracker.Data;
+
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ProjectTracker.Interfaces;
@@ -62,7 +63,7 @@ namespace ProjectTracker.Controllers
         {
             if (newPerson == null)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
             var person = _personRepository.GetPersons().Where(pe => pe.Username == newPerson.Username).FirstOrDefault();
@@ -84,13 +85,12 @@ namespace ProjectTracker.Controllers
                 return StatusCode(500, ModelState);
             }
 
-            return Ok("Sucessfully added");
+            return Ok(new { message = "Successfully added" });
         }
 
         [HttpPut("{personId}")]
         public IActionResult UpdatePerson(int personId, [FromBody] PersonDto personInfo)
         {
-            //TODO maybe remove int personId
             if (personInfo == null)
             {
                 return BadRequest(ModelState);
@@ -108,7 +108,7 @@ namespace ProjectTracker.Controllers
 
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
             
             if (!_personRepository.UpdatePerson(personInfo))
@@ -117,7 +117,7 @@ namespace ProjectTracker.Controllers
                 return StatusCode(500, ModelState);
             }
 
-            return Ok("Succesfully updated");
+            return Ok(new { message = "Successfully updated" });
         }
 
 
@@ -130,7 +130,6 @@ namespace ProjectTracker.Controllers
             }
 
             var personDelete = _personRepository.GetPerson(id);
-            //var personDelete = _mapper.Map<Person>(_personRepository.GetPerson(id));
 
             if (!ModelState.IsValid)
             {
@@ -143,7 +142,7 @@ namespace ProjectTracker.Controllers
                 return StatusCode(500, ModelState);
             }
 
-            return Ok("Succesfully deleted");
+            return Ok(new { message = "Successfully deleted" });
         }
 
     }

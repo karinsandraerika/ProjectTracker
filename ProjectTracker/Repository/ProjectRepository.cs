@@ -1,4 +1,5 @@
 ﻿using System;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ProjectTracker.Data;
 using ProjectTracker.Dto;
@@ -18,8 +19,8 @@ namespace ProjectTracker.Repository
 
         public ProjectDto GetProject(int id)
         {
-            Project? project = _context.Project.Include(p => p.ProjectItems).Include(p => p.Persons).FirstOrDefault(p => p.Id == id);
-            ProjectDto projectDto = new ProjectDto()
+            var project = _context.Project.Include(p => p.ProjectItems).Include(p => p.Persons).FirstOrDefault(p => p.Id == id);
+            var projectDto = new ProjectDto()
             {
                 Id = project.Id,
                 Name = project.Name,
@@ -33,7 +34,7 @@ namespace ProjectTracker.Repository
         public ICollection<ProjectDto> GetProjects()
         {
             var projects = _context.Project.Include(p => p.ProjectItems).Include(p => p.Persons).ToList();
-            List<ProjectDto> projectDtos = new List<ProjectDto>();
+            var projectDtos = new List<ProjectDto>();
             foreach (var project in projects)
             {
                 var projectDto = new ProjectDto()
@@ -72,6 +73,7 @@ namespace ProjectTracker.Repository
         {
             var project = _context.Project.Include(p => p.ProjectItems).Include(p => p.Persons).
                 FirstOrDefault(p => p.Id == projectInfo.Id);
+            //Check that the name does not exist for another project
             project.Name = projectInfo.Name ?? project.Name;
             project.Description = projectInfo.Description ?? project.Description;
             if (projectInfo.Persons != null)
